@@ -7,3 +7,4 @@
 7. Generate api documentation -> Swagger2
 8. Hosting the website -> Tomcat
 9. Client side data cache -> Cookie
+10. Gather logs to console and file -> slf4j/log4j
