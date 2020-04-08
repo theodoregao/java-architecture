@@ -5,3 +5,4 @@
 5. Debug restful api -> postman
 6. Ensure data integrality -> @Transactional
 7. Generate api documentation -> Swagger2
+8. Hosting the website -> Tomcat
