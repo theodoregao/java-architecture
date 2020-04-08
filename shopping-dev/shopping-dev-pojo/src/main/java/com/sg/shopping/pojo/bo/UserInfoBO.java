@@ -6,11 +6,11 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "UserInfo BO", description = "BO entity for client side input for a new user")
 public class UserInfoBO {
 
-    @ApiModelProperty(value = "Username", name = "username", example = "Theodore")
+    @ApiModelProperty(value = "Username", name = "username", example = "Theodore", required = true)
     private String username;
-    @ApiModelProperty(value = "Password", name = "password", example = "123456")
+    @ApiModelProperty(value = "Password", name = "password", example = "123456", required = true)
     private String password;
-    @ApiModelProperty(value = "ConfirmPassword", name = "confirmPassword", example = "123456")
+    @ApiModelProperty(value = "ConfirmPassword", name = "confirmPassword", example = "123456", required = false)
     private String confirmPassword;
 
     public String getUsername() {

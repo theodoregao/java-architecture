@@ -1,6 +1,8 @@
 package com.sg.shopping.controller;
 
 import com.sg.shopping.common.utils.JsonResult;
+import com.sg.shopping.common.utils.MD5Utils;
+import com.sg.shopping.pojo.UserInfo;
 import com.sg.shopping.pojo.bo.UserInfoBO;
 import com.sg.shopping.service.UserService;
 import io.swagger.annotations.Api;
@@ -8,6 +10,8 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.NoSuchAlgorithmException;
 
 @RestController
 @RequestMapping("passport")
@@ -54,6 +58,26 @@ public class PassportController {
         }
 
         return JsonResult.ok(userService.createUser(userInfoBO));
+    }
+
+    @ApiOperation(value = "Check whether the new username is available", httpMethod = "POST")
+    @PostMapping("/login")
+    public JsonResult login(@RequestBody UserInfoBO userInfoBO) throws NoSuchAlgorithmException {
+        String username = userInfoBO.getUsername();
+        String password = userInfoBO.getPassword();
+
+        if (StringUtils.isBlank(username) ||
+                StringUtils.isBlank(password)) {
+            return JsonResult.errorMsg("username or password cannot be null");
+        }
+
+        UserInfo userInfo = userService.login(username, MD5Utils.getMd5String(password));
+
+        if (userInfo == null) {
+            return JsonResult.errorMsg("Username or password incorrect");
+        }
+
+        return JsonResult.ok(userInfo);
     }
 
 }

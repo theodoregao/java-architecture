@@ -8,4 +8,6 @@ public interface UserService {
     boolean isUsernameExists(String username);
 
     UserInfo createUser(UserInfoBO userInfoBO);
+
+    UserInfo login(String username, String password);
 }
