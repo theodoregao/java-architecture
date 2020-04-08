@@ -8,3 +8,4 @@
 8. Hosting the website -> Tomcat
 9. Client side data cache -> Cookie
 10. Gather logs to console and file -> slf4j/log4j
+11. Tracking method call and add log -> spring-boot-starter-aop
