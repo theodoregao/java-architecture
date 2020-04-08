@@ -6,3 +6,4 @@
 6. Ensure data integrality -> @Transactional
 7. Generate api documentation -> Swagger2
 8. Hosting the website -> Tomcat
+9. Client side data cache -> Cookie
