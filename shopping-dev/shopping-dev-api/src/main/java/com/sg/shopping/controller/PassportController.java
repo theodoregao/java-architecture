@@ -1,6 +1,8 @@
 package com.sg.shopping.controller;
 
+import com.sg.shopping.common.utils.CookieUtils;
 import com.sg.shopping.common.utils.JsonResult;
+import com.sg.shopping.common.utils.JsonUtils;
 import com.sg.shopping.common.utils.MD5Utils;
 import com.sg.shopping.pojo.UserInfo;
 import com.sg.shopping.pojo.bo.UserInfoBO;
@@ -11,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.NoSuchAlgorithmException;
 
 @RestController
@@ -34,7 +38,9 @@ public class PassportController {
 
     @ApiOperation(value = "Register", notes = "Register a new user with username and password", httpMethod = "POST")
     @PostMapping("/register")
-    public JsonResult register(@RequestBody UserInfoBO userInfoBO) {
+    public JsonResult register(@RequestBody UserInfoBO userInfoBO,
+                               HttpServletRequest request,
+                               HttpServletResponse response) {
         String username = userInfoBO.getUsername();
         String password = userInfoBO.getPassword();
         String confirmPassword = userInfoBO.getConfirmPassword();
@@ -57,12 +63,20 @@ public class PassportController {
             return JsonResult.errorMsg("password need to be the same as password confirm");
         }
 
-        return JsonResult.ok(userService.createUser(userInfoBO));
+        UserInfo userInfo = userService.createUser(userInfoBO);
+
+        if (userInfo != null) {
+            CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfo), true);
+        }
+
+        return JsonResult.ok(userInfo);
     }
 
     @ApiOperation(value = "Check whether the new username is available", httpMethod = "POST")
     @PostMapping("/login")
-    public JsonResult login(@RequestBody UserInfoBO userInfoBO) throws NoSuchAlgorithmException {
+    public JsonResult login(@RequestBody UserInfoBO userInfoBO,
+                            HttpServletRequest request,
+                            HttpServletResponse response) throws NoSuchAlgorithmException {
         String username = userInfoBO.getUsername();
         String password = userInfoBO.getPassword();
 
@@ -77,7 +91,21 @@ public class PassportController {
             return JsonResult.errorMsg("Username or password incorrect");
         }
 
+        userInfo = setNullProperty(userInfo);
+
+        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfo), true);
+
         return JsonResult.ok(userInfo);
+    }
+
+    private UserInfo setNullProperty(UserInfo userInfo) {
+        userInfo.setPassword(null);
+        userInfo.setMobile(null);
+        userInfo.setEmail(null);
+        userInfo.setBirthday(null);
+        userInfo.setCreatedTime(null);
+        userInfo.setUpdatedTime(null);
+        return userInfo;
     }
 
 }
