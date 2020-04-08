@@ -98,6 +98,15 @@ public class PassportController {
         return JsonResult.ok(userInfo);
     }
 
+    @ApiOperation(value = "User logout", httpMethod = "POST")
+    @PostMapping("/logout")
+    public JsonResult logout(@RequestParam String userId,
+                             HttpServletRequest request,
+                             HttpServletResponse response) {
+        CookieUtils.deleteCookie(request, response, "user");
+        return JsonResult.ok();
+    }
+
     private UserInfo setNullProperty(UserInfo userInfo) {
         userInfo.setPassword(null);
         userInfo.setMobile(null);
