@@ -1,9 +1,16 @@
 package com.sg.shopping.pojo.bo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(value = "UserInfo BO", description = "BO entity for client side input for a new user")
 public class UserInfoBO {
 
+    @ApiModelProperty(value = "Username", name = "username", example = "Theodore")
     private String username;
+    @ApiModelProperty(value = "Password", name = "password", example = "123456")
     private String password;
+    @ApiModelProperty(value = "ConfirmPassword", name = "confirmPassword", example = "123456")
     private String confirmPassword;
 
     public String getUsername() {

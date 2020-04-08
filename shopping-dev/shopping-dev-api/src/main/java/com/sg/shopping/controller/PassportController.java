@@ -1,21 +1,23 @@
 package com.sg.shopping.controller;
 
 import com.sg.shopping.common.utils.JsonResult;
-import com.sg.shopping.pojo.UserInfo;
 import com.sg.shopping.pojo.bo.UserInfoBO;
 import com.sg.shopping.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("passport")
+@Api(value = "Register & login", tags = {"Provide APIs for register and login"})
 public class PassportController {
 
     @Autowired
     private UserService userService;
 
+    @ApiOperation(value = "Check whether the new username is available", httpMethod = "GET")
     @GetMapping("/isNewUsernameAvailable")
     public JsonResult isNewUsernameAvailable(@RequestParam String username) {
         if (StringUtils.isBlank(username)) {
@@ -26,6 +28,7 @@ public class PassportController {
                 JsonResult.ok();
     }
 
+    @ApiOperation(value = "Register", notes = "Register a new user with username and password", httpMethod = "POST")
     @PostMapping("/register")
     public JsonResult register(@RequestBody UserInfoBO userInfoBO) {
         String username = userInfoBO.getUsername();
