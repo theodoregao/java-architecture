@@ -102,4 +102,26 @@ public class ItemsController extends BaseController {
         return JsonResult.ok(itemService.searchItems(keywords, sort, page, pageSize));
     }
 
+    @GetMapping("/catItems")
+    @ApiOperation(value = "Search items by category", httpMethod = "GET")
+    public JsonResult catItems(
+            @ApiParam(name = "catId", value = "catId", required = true) @RequestParam String catId,
+            @ApiParam(name = "sort", value = "sort", required = false) @RequestParam String sort,
+            @ApiParam(name = "page", value = "page", required = false) @RequestParam Integer page,
+            @ApiParam(name = "pageSize", value = "pageSize", required = false) @RequestParam Integer pageSize) {
+        if (StringUtils.isBlank(catId)) {
+            return JsonResult.errorMsg(null);
+        }
+
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = BaseController.PAGE_SIZE;
+        }
+
+        return JsonResult.ok(itemService.searchItemsByCategory(catId, sort, page, pageSize));
+    }
+
 }

@@ -115,6 +115,15 @@ public class ItemServiceImpl implements ItemService {
         return setterPagedGrid(itemsMapperCustom.searchItems(map), page);
     }
 
+    @Override
+    public PagedGridResult searchItemsByCategory(String catId, String sort, Integer page, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("catId", catId);
+        map.put("sort", sort);
+        PageHelper.startPage(page, pageSize);
+        return setterPagedGrid(itemsMapperCustom.searchItemsByThirdCat(map), page);
+    }
+
     private Integer getCommentCounts(String itemId, Integer level) {
         ItemsComments condition = new ItemsComments();
         condition.setItemId(itemId);

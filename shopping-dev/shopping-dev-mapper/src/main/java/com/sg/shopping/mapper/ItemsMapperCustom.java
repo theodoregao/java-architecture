@@ -15,4 +15,5 @@ public interface ItemsMapperCustom extends MyMapper<Items> {
 
     List<SearchItemsVO> searchItems(@Param("paramsMap") Map<String, Object> map);
 
+    List<SearchItemsVO> searchItemsByThirdCat(@Param("paramsMap") Map<String, Object> map);
 }
