@@ -1,5 +1,6 @@
 package com.sg.shopping.service;
 
+import com.sg.shopping.common.utils.PagedGridResult;
 import com.sg.shopping.pojo.Items;
 import com.sg.shopping.pojo.ItemsImg;
 import com.sg.shopping.pojo.ItemsParam;
@@ -20,5 +21,5 @@ public interface ItemService {
 
     CommentLevelCountsVO getCommentCounts(String itemId);
 
-    List<ItemCommentVO> queryPagedComments(String itemId, Integer level);
+    PagedGridResult queryPagedComments(String itemId, Integer level, Integer page, Integer pageSize);
 }

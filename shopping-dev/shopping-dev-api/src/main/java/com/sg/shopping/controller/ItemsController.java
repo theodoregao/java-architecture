@@ -48,14 +48,36 @@ public class ItemsController {
     }
 
     @GetMapping("/commentLevel")
-    @ApiOperation(value = "Get item comment level by item id", httpMethod = "GET")
+    @ApiOperation(value = "Get item comment level count by item id", httpMethod = "GET")
     public JsonResult commentLevel(@ApiParam(name = "itemId", value = "itemId", required = true)
-                           @RequestParam String itemId) {
+                                   @RequestParam String itemId) {
         if (StringUtils.isBlank(itemId)) {
             return JsonResult.errorMsg(null);
         }
 
         return JsonResult.ok(itemService.getCommentCounts(itemId));
+    }
+
+    @GetMapping("/comments")
+    @ApiOperation(value = "Get paged item comment by item id", httpMethod = "GET")
+    public JsonResult comments(
+            @ApiParam(name = "itemId", value = "itemId", required = true) @RequestParam String itemId,
+            @ApiParam(name = "level", value = "level", required = false) @RequestParam Integer level,
+            @ApiParam(name = "page", value = "page", required = false) @RequestParam Integer page,
+            @ApiParam(name = "pageSize", value = "pageSize", required = false) @RequestParam Integer pageSize) {
+        if (StringUtils.isBlank(itemId)) {
+            return JsonResult.errorMsg(null);
+        }
+
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+
+        return JsonResult.ok(itemService.queryPagedComments(itemId, level, page, pageSize));
     }
 
 }

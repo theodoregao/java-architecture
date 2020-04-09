@@ -1,6 +1,9 @@
 package com.sg.shopping.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.sg.shopping.common.enums.CommentLevel;
+import com.sg.shopping.common.utils.PagedGridResult;
 import com.sg.shopping.mapper.*;
 import com.sg.shopping.pojo.*;
 import com.sg.shopping.pojo.vo.CommentLevelCountsVO;
@@ -87,11 +90,14 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<ItemCommentVO> queryPagedComments(String itemId, Integer level) {
+    public PagedGridResult queryPagedComments(String itemId, Integer level, Integer page, Integer pageSize) {
         Map<String, Object> map = new HashMap<>();
         map.put("itemId", itemId);
         map.put("level", level);
-        return itemsMapperCustom.queryItemComments(map);
+
+        // Apply mybatis-pagehelper
+        PageHelper.startPage(page, pageSize);
+        return setterPagedGrid(itemsMapperCustom.queryItemComments(map), page);
     }
 
     private Integer getCommentCounts(String itemId, Integer level) {
@@ -101,5 +107,16 @@ public class ItemServiceImpl implements ItemService {
             condition.setCommentLevel(level);
         }
         return itemsCommentsMapper.selectCount(condition);
+    }
+
+    private PagedGridResult setterPagedGrid(List<?> list, Integer page) {
+        PageInfo<?> pageList = new PageInfo<>(list);
+        PagedGridResult pagedGridResult = new PagedGridResult();
+        pagedGridResult.setPage(page);
+        pagedGridResult.setRows(list);
+        pagedGridResult.setTotal(pageList.getPages());
+        pagedGridResult.setRecords(pageList.getTotal());
+
+        return pagedGridResult;
     }
 }

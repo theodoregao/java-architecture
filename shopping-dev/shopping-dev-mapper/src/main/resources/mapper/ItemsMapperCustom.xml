@@ -12,7 +12,7 @@
     FROM
       items_comments ic
     LEFT JOIN
-      users u
+      user_info u
     ON
       ic.user_id = u.id
     WHERE

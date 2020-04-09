@@ -11,3 +11,4 @@
 11. Spring: Tracking method call and add log -> spring-boot-starter-aop
 12. MyBatis: Config MyBatis to log sql query
 13. MyBatis: Custom sql query using vo (View Object) to communicate with db
+14. MyBatis: Apply mybatis-pagehelper to provide query result pagination.

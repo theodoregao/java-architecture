@@ -10,6 +10,6 @@ import java.util.Map;
 
 public interface ItemsMapperCustom extends MyMapper<Items> {
 
-    List<ItemCommentVO> queryItemComments(@Param("paramMap") Map<String, Object> map);
+    List<ItemCommentVO> queryItemComments(@Param("paramsMap") Map<String, Object> map);
 
 }
