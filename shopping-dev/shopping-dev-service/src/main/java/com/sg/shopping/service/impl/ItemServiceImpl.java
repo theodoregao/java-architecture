@@ -3,6 +3,7 @@ package com.sg.shopping.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sg.shopping.common.enums.CommentLevel;
+import com.sg.shopping.common.utils.DesensitizationUtil;
 import com.sg.shopping.common.utils.PagedGridResult;
 import com.sg.shopping.mapper.*;
 import com.sg.shopping.pojo.*;
@@ -97,7 +98,11 @@ public class ItemServiceImpl implements ItemService {
 
         // Apply mybatis-pagehelper
         PageHelper.startPage(page, pageSize);
-        return setterPagedGrid(itemsMapperCustom.queryItemComments(map), page);
+        List<ItemCommentVO> itemCommentVOS = itemsMapperCustom.queryItemComments(map);
+        for (ItemCommentVO itemCommentVO: itemCommentVOS) {
+            itemCommentVO.setNickname(DesensitizationUtil.commonDisplay(itemCommentVO.getNickname()));
+        }
+        return setterPagedGrid(itemCommentVOS, page);
     }
 
     private Integer getCommentCounts(String itemId, Integer level) {
