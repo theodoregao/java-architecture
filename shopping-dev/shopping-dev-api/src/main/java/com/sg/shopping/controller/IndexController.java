@@ -48,4 +48,15 @@ public class IndexController {
         return JsonResult.ok(categoryService.getSubCategoryList(rootCategoryId));
     }
 
+    @GetMapping("/sixNewItems/{rootCategoryId}")
+    @ApiOperation(value = "Get next 6 new items", httpMethod = "GET")
+    public JsonResult sixNewItems(
+            @ApiParam(name="rootCategoryId", value = "root level category id", required = true)
+            @PathVariable Integer rootCategoryId) {
+        if (rootCategoryId == null) {
+            return JsonResult.errorMsg("");
+        }
+        return JsonResult.ok(categoryService.getSixNewItemsLazy(rootCategoryId));
+    }
+
 }
