@@ -5,6 +5,7 @@ import com.sg.shopping.pojo.ItemsImg;
 import com.sg.shopping.pojo.ItemsParam;
 import com.sg.shopping.pojo.ItemsSpec;
 import com.sg.shopping.pojo.vo.CommentLevelCountsVO;
+import com.sg.shopping.pojo.vo.ItemCommentVO;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface ItemService {
     ItemsParam getItemParam(String itemId);
 
     CommentLevelCountsVO getCommentCounts(String itemId);
+
+    List<ItemCommentVO> queryPagedComments(String itemId, Integer level);
 }
