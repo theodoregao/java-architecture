@@ -105,6 +105,16 @@ public class ItemServiceImpl implements ItemService {
         return setterPagedGrid(itemCommentVOS, page);
     }
 
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public PagedGridResult searchItems(String keywords, String sort, Integer page, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("keywords", keywords);
+        map.put("sort", sort);
+        PageHelper.startPage(page, pageSize);
+        return setterPagedGrid(itemsMapperCustom.searchItems(map), page);
+    }
+
     private Integer getCommentCounts(String itemId, Integer level) {
         ItemsComments condition = new ItemsComments();
         condition.setItemId(itemId);

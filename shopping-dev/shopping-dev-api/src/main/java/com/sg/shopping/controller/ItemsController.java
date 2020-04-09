@@ -20,7 +20,7 @@ import java.util.List;
 @Api(value = "Item page", tags = {"Item page related service"})
 @RestController
 @RequestMapping("items")
-public class ItemsController {
+public class ItemsController extends BaseController {
 
     @Autowired
     private ItemService itemService;
@@ -74,10 +74,32 @@ public class ItemsController {
         }
 
         if (pageSize == null) {
-            pageSize = 10;
+            pageSize = BaseController.COMMENT_PAGE_SIZE;
         }
 
         return JsonResult.ok(itemService.queryPagedComments(itemId, level, page, pageSize));
+    }
+
+    @GetMapping("/search")
+    @ApiOperation(value = "Search items by keywords", httpMethod = "GET")
+    public JsonResult search(
+            @ApiParam(name = "keywords", value = "keywords", required = true) @RequestParam String keywords,
+            @ApiParam(name = "sort", value = "sort", required = false) @RequestParam String sort,
+            @ApiParam(name = "page", value = "page", required = false) @RequestParam Integer page,
+            @ApiParam(name = "pageSize", value = "pageSize", required = false) @RequestParam Integer pageSize) {
+        if (StringUtils.isBlank(keywords)) {
+            return JsonResult.errorMsg(null);
+        }
+
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = BaseController.PAGE_SIZE;
+        }
+
+        return JsonResult.ok(itemService.searchItems(keywords, sort, page, pageSize));
     }
 
 }
