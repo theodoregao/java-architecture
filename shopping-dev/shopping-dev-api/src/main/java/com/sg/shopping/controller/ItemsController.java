@@ -12,10 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -48,6 +45,17 @@ public class ItemsController {
         itemInfoVO.setItemParams(itemParams);
 
         return JsonResult.ok(itemInfoVO);
+    }
+
+    @GetMapping("/commentLevel")
+    @ApiOperation(value = "Get item comment level by item id", httpMethod = "GET")
+    public JsonResult commentLevel(@ApiParam(name = "itemId", value = "itemId", required = true)
+                           @RequestParam String itemId) {
+        if (StringUtils.isBlank(itemId)) {
+            return JsonResult.errorMsg(null);
+        }
+
+        return JsonResult.ok(itemService.getCommentCounts(itemId));
     }
 
 }
