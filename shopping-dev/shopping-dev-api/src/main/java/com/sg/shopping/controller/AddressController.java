@@ -39,6 +39,22 @@ public class AddressController {
         return JsonResult.ok();
     }
 
+    @PostMapping("/update")
+    @ApiOperation(value = "update", notes = "Update address for a user", httpMethod = "POST")
+    public Object update(@RequestBody AddressBO addressBO) {
+        if (StringUtils.isBlank(addressBO.getAddressId())) {
+            return JsonResult.errorMsg("address id cannot be null");
+        }
+
+        JsonResult checkResult = checkAddress(addressBO);
+        if (checkResult.getStatus() != HttpStatus.OK.value()) {
+            return checkResult;
+        }
+
+        addressService.updateUserAddress(addressBO);
+        return JsonResult.ok();
+    }
+
     private JsonResult checkAddress(AddressBO addressBO) {
         String receiver = addressBO.getReceiver();
         if (StringUtils.isBlank(receiver)) {
