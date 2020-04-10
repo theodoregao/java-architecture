@@ -7,6 +7,8 @@ import com.sg.shopping.pojo.ItemsParam;
 import com.sg.shopping.pojo.ItemsSpec;
 import com.sg.shopping.pojo.vo.CommentLevelCountsVO;
 import com.sg.shopping.pojo.vo.ItemCommentVO;
+import com.sg.shopping.pojo.vo.ShopcartVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -26,4 +28,6 @@ public interface ItemService {
     PagedGridResult searchItems(String keywords, String sort, Integer page, Integer pageSize);
 
     PagedGridResult searchItemsByCategory(String catId, String sort, Integer page, Integer pageSize);
+
+    List<ShopcartVO> queryItemsBySpecIds(String specIds);
 }

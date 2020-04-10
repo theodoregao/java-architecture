@@ -9,6 +9,7 @@ import com.sg.shopping.mapper.*;
 import com.sg.shopping.pojo.*;
 import com.sg.shopping.pojo.vo.CommentLevelCountsVO;
 import com.sg.shopping.pojo.vo.ItemCommentVO;
+import com.sg.shopping.pojo.vo.ShopcartVO;
 import com.sg.shopping.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.PrimitiveIterator;
+import java.util.*;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -116,12 +114,19 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public PagedGridResult searchItemsByCategory(String catId, String sort, Integer page, Integer pageSize) {
         Map<String, Object> map = new HashMap<>();
         map.put("catId", catId);
         map.put("sort", sort);
         PageHelper.startPage(page, pageSize);
         return setterPagedGrid(itemsMapperCustom.searchItemsByThirdCat(map), page);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public List<ShopcartVO> queryItemsBySpecIds(String specIds) {
+        return itemsMapperCustom.queryItemsBySpecIds(Arrays.asList(specIds.split(",")));
     }
 
     private Integer getCommentCounts(String itemId, Integer level) {

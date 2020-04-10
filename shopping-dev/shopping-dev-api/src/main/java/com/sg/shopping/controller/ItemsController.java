@@ -124,4 +124,15 @@ public class ItemsController extends BaseController {
         return JsonResult.ok(itemService.searchItemsByCategory(catId, sort, page, pageSize));
     }
 
+    @GetMapping("/refresh")
+    @ApiOperation(value = "Refresh shopping cart data", httpMethod = "GET")
+    public JsonResult refresh(
+            @ApiParam(name = "itemSpecIds", value = "itemSpecIds", required = true) @RequestParam String itemSpecIds) {
+        if (StringUtils.isBlank(itemSpecIds)) {
+            return JsonResult.ok();
+        }
+
+        return JsonResult.ok(itemService.queryItemsBySpecIds(itemSpecIds));
+    }
+
 }
