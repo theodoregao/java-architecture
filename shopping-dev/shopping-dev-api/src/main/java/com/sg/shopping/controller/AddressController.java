@@ -55,6 +55,17 @@ public class AddressController {
         return JsonResult.ok();
     }
 
+    @PostMapping("/delete")
+    @ApiOperation(value = "delete", notes = "Delete address for a user", httpMethod = "POST")
+    public Object delete(@RequestParam String userId, @RequestParam String addressId) {
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(addressId)) {
+            return JsonResult.errorMsg("user id or address id cannot be null");
+        }
+
+        addressService.deleteUserAddress(userId, addressId);
+        return JsonResult.ok();
+    }
+
     private JsonResult checkAddress(AddressBO addressBO) {
         String receiver = addressBO.getReceiver();
         if (StringUtils.isBlank(receiver)) {
