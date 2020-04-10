@@ -1,5 +1,6 @@
 package com.sg.shopping.service.impl;
 
+import com.sg.shopping.common.enums.YesOrNo;
 import com.sg.shopping.mapper.UserAddressMapper;
 import com.sg.shopping.pojo.UserAddress;
 import com.sg.shopping.pojo.bo.AddressBO;
@@ -72,5 +73,24 @@ public class AddressServiceImpl implements AddressService {
         userAddress.setUserId(userId);
         userAddress.setId(addressId);
         userAddressMapper.delete(userAddress);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void updateUserAddressToBeDefaultAddress(String userId, String addressId) {
+        UserAddress queryAddress = new UserAddress();
+        queryAddress.setUserId(userId);
+        queryAddress.setIsDefault(YesOrNo.YES.type);
+        List<UserAddress> list = userAddressMapper.select(queryAddress);
+        for (UserAddress address: list) {
+            address.setIsDefault(YesOrNo.NO.type);
+            userAddressMapper.updateByPrimaryKeySelective(address);
+        }
+
+        UserAddress defaultAddress = new UserAddress();
+        defaultAddress.setUserId(userId);
+        defaultAddress.setId(addressId);
+        defaultAddress.setIsDefault(YesOrNo.YES.type);
+        userAddressMapper.updateByPrimaryKeySelective(defaultAddress);
     }
 }
