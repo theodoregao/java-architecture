@@ -1,7 +1,9 @@
 package com.sg.shopping.service.impl;
 
+import com.sg.shopping.common.enums.OrderStatusEnum;
 import com.sg.shopping.common.enums.YesOrNo;
 import com.sg.shopping.mapper.OrderItemsMapper;
+import com.sg.shopping.mapper.OrderStatusMapper;
 import com.sg.shopping.mapper.OrdersMapper;
 import com.sg.shopping.pojo.*;
 import com.sg.shopping.pojo.bo.SubmitOrderBO;
@@ -24,6 +26,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderItemsMapper orderItemsMapper;
+
+    @Autowired
+    private OrderStatusMapper orderStatusMapper;
 
     @Autowired
     private AddressService addressService;
@@ -89,10 +94,18 @@ public class OrderServiceImpl implements OrderService {
             subOrderItem.setPrice(itemsSpec.getPriceDiscount());
 
             orderItemsMapper.insert(subOrderItem);
+
+            itemService.decreaseItemSpecStock(specId, buyCounts);
         }
 
-//        newOrder.setTotalAmount();
-//        newOrder.setRealPayAmount();
+        newOrder.setTotalAmount(totalAmount);
+        newOrder.setRealPayAmount(realPayAmount);
         ordersMapper.insert(newOrder);
+
+        OrderStatus waitPayOrderStatus = new OrderStatus();
+        waitPayOrderStatus.setOrderId(orderId);
+        waitPayOrderStatus.setOrderStatus(OrderStatusEnum.WAIT_PAY.type);
+        waitPayOrderStatus.setCreatedTime(new Date());
+        orderStatusMapper.insert(waitPayOrderStatus);
     }
 }

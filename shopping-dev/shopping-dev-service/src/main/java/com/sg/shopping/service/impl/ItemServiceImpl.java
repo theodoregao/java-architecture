@@ -144,6 +144,14 @@ public class ItemServiceImpl implements ItemService {
         return result != null ? result.getUrl() : "";
     }
 
+    @Override
+    public void decreaseItemSpecStock(String itemSpecId, int buyCounts) {
+        int result = itemsMapperCustom.decreaseItemSpecStock(itemSpecId, buyCounts);
+        if (result != 1) {
+            throw new RuntimeException("create order failed. Reason: stock is not enough.");
+        }
+    }
+
     private Integer getCommentCounts(String itemId, Integer level) {
         ItemsComments condition = new ItemsComments();
         condition.setItemId(itemId);
