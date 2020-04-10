@@ -88,14 +88,15 @@ public class OrderServiceImpl implements OrderService {
             subOrderItem.setOrderId(orderId);
             subOrderItem.setItemId(itemId);
             subOrderItem.setItemName(item.getItemName());
-            subOrderItem.setItemId(imgUrl);
+            subOrderItem.setItemImg(imgUrl);
             subOrderItem.setBuyCounts(buyCounts);
-            subOrderItem.setItemSpecId(specId);
+            subOrderItem.setItemSpecId(specId);;
+            subOrderItem.setItemSpecName(itemsSpec.getName());
             subOrderItem.setPrice(itemsSpec.getPriceDiscount());
 
-            orderItemsMapper.insert(subOrderItem);
-
             itemService.decreaseItemSpecStock(specId, buyCounts);
+
+            orderItemsMapper.insert(subOrderItem);
         }
 
         newOrder.setTotalAmount(totalAmount);

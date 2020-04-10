@@ -131,11 +131,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public ItemsSpec queryItemSpecById(String specId) {
         return itemsSpecMapper.selectByPrimaryKey(specId);
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public String queryItemMainImgById(String itemId) {
         ItemsImg itemsImg = new ItemsImg();
         itemsImg.setId(itemId);
@@ -145,6 +147,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void decreaseItemSpecStock(String itemSpecId, int buyCounts) {
         int result = itemsMapperCustom.decreaseItemSpecStock(itemSpecId, buyCounts);
         if (result != 1) {
