@@ -3,6 +3,7 @@ package com.sg.shopping.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sg.shopping.common.enums.CommentLevel;
+import com.sg.shopping.common.enums.YesOrNo;
 import com.sg.shopping.common.utils.DesensitizationUtil;
 import com.sg.shopping.common.utils.PagedGridResult;
 import com.sg.shopping.mapper.*;
@@ -127,6 +128,20 @@ public class ItemServiceImpl implements ItemService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<ShopcartVO> queryItemsBySpecIds(String specIds) {
         return itemsMapperCustom.queryItemsBySpecIds(Arrays.asList(specIds.split(",")));
+    }
+
+    @Override
+    public ItemsSpec queryItemSpecById(String specId) {
+        return itemsSpecMapper.selectByPrimaryKey(specId);
+    }
+
+    @Override
+    public String queryItemMainImgById(String itemId) {
+        ItemsImg itemsImg = new ItemsImg();
+        itemsImg.setId(itemId);
+        itemsImg.setIsMain(YesOrNo.YES.type);
+        ItemsImg result = itemsImgMapper.selectOne(itemsImg);
+        return result != null ? result.getUrl() : "";
     }
 
     private Integer getCommentCounts(String itemId, Integer level) {
