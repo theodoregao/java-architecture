@@ -32,4 +32,17 @@ public class ShopcartController {
         return JsonResult.ok();
     }
 
+    @PostMapping("/del")
+    @ApiOperation(value = "del", notes = "Delete items from shopping cart", httpMethod = "POST")
+    public Object delete(@RequestParam String userId,
+                      @RequestParam String itemSpecId,
+                      HttpServletRequest request,
+                      HttpServletResponse response) {
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(itemSpecId)) {
+            return JsonResult.errorMsg("");
+        }
+
+        return JsonResult.ok();
+    }
+
 }
