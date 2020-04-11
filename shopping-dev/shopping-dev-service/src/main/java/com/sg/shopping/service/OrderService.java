@@ -11,4 +11,6 @@ public interface OrderService {
     void updateOrderStatus(String orderId, Integer orderStatus);
 
     OrderStatus queryOrderStatusInfo(String orderId);
+
+    void closeOrder();
 }

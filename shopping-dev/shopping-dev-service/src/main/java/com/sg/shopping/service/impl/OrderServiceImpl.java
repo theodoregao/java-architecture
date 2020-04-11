@@ -2,6 +2,7 @@ package com.sg.shopping.service.impl;
 
 import com.sg.shopping.common.enums.OrderStatusEnum;
 import com.sg.shopping.common.enums.YesOrNo;
+import com.sg.shopping.common.utils.DateUtil;
 import com.sg.shopping.mapper.OrderItemsMapper;
 import com.sg.shopping.mapper.OrderStatusMapper;
 import com.sg.shopping.mapper.OrdersMapper;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -135,7 +137,32 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public OrderStatus queryOrderStatusInfo(String orderId) {
         return orderStatusMapper.selectByPrimaryKey(orderId);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void closeOrder() {
+        OrderStatus queryOrderSatus = new OrderStatus();
+        queryOrderSatus.setOrderStatus(OrderStatusEnum.WAIT_PAY.type);
+        List<OrderStatus> orderStatus = orderStatusMapper.select(queryOrderSatus);
+        for (OrderStatus os: orderStatus) {
+            Date createdDateTime = os.getCreatedTime();
+            int days = DateUtil.daysBetween(createdDateTime, new Date());
+            if (days >= 1) {
+                doCloseOrder(os.getOrderId());
+            }
+        }
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    private void doCloseOrder(String orderId) {
+        OrderStatus orderStatus = new OrderStatus();
+        orderStatus.setOrderId(orderId);
+        orderStatus.setOrderStatus(OrderStatusEnum.CLOSE.type);
+        orderStatus.setCloseTime(new Date());
+        orderStatusMapper.updateByPrimaryKey(orderStatus);
     }
 }
