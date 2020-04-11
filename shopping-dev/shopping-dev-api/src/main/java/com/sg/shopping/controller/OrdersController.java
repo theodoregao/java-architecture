@@ -71,4 +71,9 @@ public class OrdersController extends BaseController {
         orderService.updateOrderStatus(merchantOrderId, OrderStatusEnum.WAIT_DELIVER.type);
         return HttpStatus.OK.value();
     }
+
+    @PostMapping("getPaidOrderInfo")
+    public JsonResult getPaidOrderInfo(String orderId) {
+        return JsonResult.ok(orderService.queryOrderStatusInfo(orderId));
+    }
 }
