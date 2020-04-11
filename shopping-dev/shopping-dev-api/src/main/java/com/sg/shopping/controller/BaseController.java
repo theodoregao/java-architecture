@@ -5,7 +5,7 @@ public class BaseController {
     public static final Integer PAGE_SIZE = 20;
 
     public static final String FOODIE_SHOPCART = "shopcart";
-    public static final String PAY_RETURN_URL = "http://w25uef.natappfree.cc/orders/notifyMerchantOrderPaid";
+    public static final String PAY_RETURN_URL = "http://3a95pt.natappfree.cc/orders/notifyMerchantOrderPaid";
 
     public static final String PAYMENT_URL = "http://payment.t.mukewang.com/foodie-payment/payment/createMerchantOrder";
     public static final String IMOOC_USERID = "1237820-357889551";
