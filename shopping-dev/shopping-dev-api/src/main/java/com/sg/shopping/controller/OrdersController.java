@@ -1,5 +1,6 @@
 package com.sg.shopping.controller;
 
+import com.sg.shopping.common.enums.OrderStatusEnum;
 import com.sg.shopping.common.enums.PayMethod;
 import com.sg.shopping.common.utils.CookieUtils;
 import com.sg.shopping.common.utils.JsonResult;
@@ -8,6 +9,7 @@ import com.sg.shopping.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,5 +38,11 @@ public class OrdersController extends BaseController {
 //        CookieUtils.setCookie(request, response, FOODIE_SHOPCART, "", true);
 
         return JsonResult.ok(orderId);
+    }
+
+    @PostMapping("notifyMerchantOrderPaid")
+    public Integer notifyMerchantOrderPaid(String merchantOrderId) {
+        orderService.updateOrderStatus(merchantOrderId, OrderStatusEnum.WAIT_DELIVER.type);
+        return HttpStatus.OK.value();
     }
 }
