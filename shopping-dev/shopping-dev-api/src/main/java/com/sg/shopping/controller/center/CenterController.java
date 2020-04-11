@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Api(value = "User center related APIs", tags = {"User center related APIs tag"})
@@ -21,7 +22,9 @@ public class CenterController extends BaseController {
 
     @GetMapping("userInfo")
     @ApiOperation(value = "user info", notes = "get user info", httpMethod = "GET")
-    public JsonResult userInfo(@ApiParam(name = "userId", value = "user id", required = true) String userId) {
+    public JsonResult userInfo(
+            @ApiParam(name = "userId", value = "user id", required = true)
+            @RequestParam String userId) {
         return JsonResult.ok(centerUserService.queryUserInfo(userId));
     }
 }
