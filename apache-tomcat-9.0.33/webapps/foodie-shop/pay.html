@@ -400,13 +400,12 @@
 	<script type="text/javascript " src="js/app.js"></script>
 	<script type="text/javascript " src="js/cities.js"></script>
 	<script type="text/javascript">
-		// $(document).ready(function(){
-		// 	$("#alipayLink").one("click",function(){
-		// 		var orderId = $("#hiddenOrderId").val();
-		// 		debugger;
-		// 		window.open('alipayTempTransit.html?orderId='+orderId);
-		// 	});
-		// });
+		$(document).ready(function(){
+			$("#alipayLink").one("click",function(){
+				var orderId = $("#hiddenOrderId").val();
+				window.open('alipayTempTransit.html?orderId='+orderId);
+			});
+		});
 		var index = new Vue({
 			el: "#pay",
 			data: {
@@ -488,9 +487,9 @@
 						window.location.href = app.centerServerUrl;
 					}
 				},
-				// goAlipay() {
-                //     window.open("alipayTempTransit.html?orderId=" + this.orderId);
-                // },
+				goAlipay() {
+                    window.open("alipayTempTransit.html?orderId=" + this.orderId);
+                },
 				choosePayMethod(payMethod) {
 					this.choosedPayMethod = payMethod;
 					
