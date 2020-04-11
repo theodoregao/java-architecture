@@ -5,6 +5,7 @@ import com.sg.shopping.common.enums.PayMethod;
 import com.sg.shopping.common.utils.CookieUtils;
 import com.sg.shopping.common.utils.JsonResult;
 import com.sg.shopping.pojo.bo.SubmitOrderBO;
+import com.sg.shopping.pojo.vo.OrderVO;
 import com.sg.shopping.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,11 +34,12 @@ public class OrdersController extends BaseController {
             JsonResult.errorMsg("Not supported pay method");
         }
 
-        String orderId = orderService.createOrder(submitOrderBO);
+        OrderVO orderVO = orderService.createOrder(submitOrderBO);
+        orderVO.getMerchantOrdersVO().setReturnUrl(PAY_RETURN_URL);
 
 //        CookieUtils.setCookie(request, response, FOODIE_SHOPCART, "", true);
 
-        return JsonResult.ok(orderId);
+        return JsonResult.ok(orderVO);
     }
 
     @PostMapping("notifyMerchantOrderPaid")

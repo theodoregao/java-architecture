@@ -12,3 +12,4 @@
 12. MyBatis: Config MyBatis to log sql query
 13. MyBatis: Custom sql query using vo (View Object) to communicate with db
 14. MyBatis: Apply mybatis-pagehelper to provide query result pagination.
+15. WechatPay: Apply WechatPay.

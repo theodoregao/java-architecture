@@ -7,6 +7,8 @@ import com.sg.shopping.mapper.OrderStatusMapper;
 import com.sg.shopping.mapper.OrdersMapper;
 import com.sg.shopping.pojo.*;
 import com.sg.shopping.pojo.bo.SubmitOrderBO;
+import com.sg.shopping.pojo.vo.MerchantOrdersVO;
+import com.sg.shopping.pojo.vo.OrderVO;
 import com.sg.shopping.service.AddressService;
 import com.sg.shopping.service.ItemService;
 import com.sg.shopping.service.OrderService;
@@ -41,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public String createOrder(SubmitOrderBO submitOrderBO) {
+    public OrderVO createOrder(SubmitOrderBO submitOrderBO) {
         String userId = submitOrderBO.getUserId();
         String addressId = submitOrderBO.getAddressId();
         String itemSpecIds = submitOrderBO.getItemSpecIds();
@@ -109,7 +111,17 @@ public class OrderServiceImpl implements OrderService {
         waitPayOrderStatus.setCreatedTime(new Date());
         orderStatusMapper.insert(waitPayOrderStatus);
 
-        return orderId;
+        MerchantOrdersVO merchantOrdersVO = new MerchantOrdersVO();
+        merchantOrdersVO.setMerchantOrderId(orderId);
+        merchantOrdersVO.setMerchantUserId(userId);
+        merchantOrdersVO.setAmount(realPayAmount + postAmount);
+        merchantOrdersVO.setPayMethod(payMethod);
+
+        OrderVO orderVO = new OrderVO();
+        orderVO.setOrderId(orderId);
+        orderVO.setMerchantOrdersVO(merchantOrdersVO);
+
+        return orderVO;
     }
 
     @Override
