@@ -11,10 +11,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Api(value = "Center User info related APIs", tags = {"Center User info related APIs tag"})
 @RestController
@@ -29,10 +35,13 @@ public class CenterUserController extends BaseController {
     public JsonResult userInfo(
             @ApiParam(name = "userId", value = "user id", required = true)
             @RequestParam String userId,
-            @RequestBody CenterUserBO userBO,
+            @RequestBody @Valid CenterUserBO userBO,
+            BindingResult bindingResult,
             HttpServletRequest request,
             HttpServletResponse response) {
-
+        if (bindingResult.hasErrors()) {
+            return JsonResult.errorMap(getErrors(bindingResult));
+        }
         UserInfo userInfo = centerUserService.updateUserInfo(userId, userBO);
 
         CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfo), true);
@@ -48,5 +57,16 @@ public class CenterUserController extends BaseController {
         userInfo.setCreatedTime(null);
         userInfo.setUpdatedTime(null);
         return userInfo;
+    }
+
+    private Map<String, String> getErrors(BindingResult bindingResult) {
+        Map<String, String> map = new HashMap<>();
+        List<FieldError> errors = bindingResult.getFieldErrors();
+        for (FieldError error: errors) {
+            String errorField = error.getField();
+            String errorMsg = error.getDefaultMessage();
+            map.put(errorField, errorMsg);
+        }
+        return map;
     }
 }

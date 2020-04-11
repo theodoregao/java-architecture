@@ -15,3 +15,4 @@
 15. WechatPay: Apply WechatPay.
 16. NatApp: Apply NatApp to provide NAT server.
 17. Sprint: Apply Scheduled Job to auto close timeout orders -> Scheduled Job, Cron: http://cron.qqe2.com/
+18. Spring: Apply hibernate to validate data.

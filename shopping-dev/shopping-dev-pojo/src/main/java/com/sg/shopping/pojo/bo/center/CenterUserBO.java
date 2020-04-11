@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.*;
 import java.util.Date;
 
+// This file applies hibernate to validate the data
 @ApiModel(value="用户对象", description="从客户端，由用户传入的数据封装在此entity中")
 public class CenterUserBO {
 
