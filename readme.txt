@@ -16,3 +16,5 @@
 16. NatApp: Apply NatApp to provide NAT server.
 17. Sprint: Apply Scheduled Job to auto close timeout orders -> Scheduled Job, Cron: http://cron.qqe2.com/
 18. Spring: Apply hibernate to validate data.
+19. Spring: Apply properties file to provide environment config for dev/prod.
+20. Spring: Apply WebMvcConfigurer to add resource handlers for local files.
