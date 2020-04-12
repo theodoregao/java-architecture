@@ -74,7 +74,7 @@ public class ItemsController extends BaseController {
         }
 
         if (pageSize == null) {
-            pageSize = BaseController.COMMENT_PAGE_SIZE;
+            pageSize = BaseController.COMMON_PAGE_SIZE;
         }
 
         return JsonResult.ok(itemService.queryPagedComments(itemId, level, page, pageSize));
