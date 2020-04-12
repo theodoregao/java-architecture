@@ -6,6 +6,7 @@ import com.sg.shopping.common.utils.JsonUtils;
 import com.sg.shopping.controller.BaseController;
 import com.sg.shopping.pojo.UserInfo;
 import com.sg.shopping.pojo.bo.center.CenterUserBO;
+import com.sg.shopping.resource.FileUpload;
 import com.sg.shopping.service.center.CenterUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +34,9 @@ public class CenterUserController extends BaseController {
 
     @Autowired
     private CenterUserService centerUserService;
+
+    @Autowired
+    private FileUpload fileUpload;
 
     @PostMapping("update")
     @ApiOperation(value = "user info", notes = "get user info", httpMethod = "POST")
@@ -66,7 +70,7 @@ public class CenterUserController extends BaseController {
         FileOutputStream fos = null;
         InputStream fis = null;
         try {
-            String fileSpace = IMAGE_USER_FACE_LOCATION;
+            String fileSpace = fileUpload.getImageUserFaceLocation();
             String uploadPathPrefix = File.separator + userId;
 
             if (file == null) {

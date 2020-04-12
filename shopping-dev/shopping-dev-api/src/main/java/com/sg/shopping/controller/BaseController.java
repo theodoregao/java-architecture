@@ -11,5 +11,5 @@ public class BaseController {
     public static final String IMOOC_USERID = "1237820-357889551";
     public static final String IMOOC_PASSCODE = "pwo1-e0o3-0o2d-10ld";
 
-    public static final String IMAGE_USER_FACE_LOCATION = "E:\\temp\\face";
+//    public static final String IMAGE_USER_FACE_LOCATION = "E:\\temp\\face";
 }
