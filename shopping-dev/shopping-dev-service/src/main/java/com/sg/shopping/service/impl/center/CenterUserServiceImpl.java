@@ -32,4 +32,14 @@ public class CenterUserServiceImpl implements CenterUserService {
         userInfoMapper.updateByPrimaryKeySelective(updatedUser);
         return queryUserInfo(userId);
     }
+
+    @Override
+    public UserInfo updateUserFace(String userId, String faceUrl) {
+        UserInfo updatedUser = new UserInfo();
+        updatedUser.setId(userId);
+        updatedUser.setFace(faceUrl);
+        updatedUser.setUpdatedTime(new Date());
+        userInfoMapper.updateByPrimaryKeySelective(updatedUser);
+        return queryUserInfo(userId);
+    }
 }

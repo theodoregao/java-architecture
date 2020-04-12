@@ -9,4 +9,6 @@ public interface CenterUserService {
     UserInfo queryUserInfo(String userId);
 
     UserInfo updateUserInfo(String userId, CenterUserBO centerUserBO);
+
+    UserInfo updateUserFace(String userId, String faceUrl);
 }

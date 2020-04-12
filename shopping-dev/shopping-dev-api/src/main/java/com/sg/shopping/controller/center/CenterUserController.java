@@ -1,6 +1,7 @@
 package com.sg.shopping.controller.center;
 
 import com.sg.shopping.common.utils.CookieUtils;
+import com.sg.shopping.common.utils.DateUtil;
 import com.sg.shopping.common.utils.JsonResult;
 import com.sg.shopping.common.utils.JsonUtils;
 import com.sg.shopping.controller.BaseController;
@@ -69,6 +70,7 @@ public class CenterUserController extends BaseController {
 
         FileOutputStream fos = null;
         InputStream fis = null;
+        String fileUploadPath = "";
         try {
             String fileSpace = fileUpload.getImageUserFaceLocation();
             String uploadPathPrefix = File.separator + userId;
@@ -86,6 +88,7 @@ public class CenterUserController extends BaseController {
             String suffix = fileNameArr[fileNameArr.length - 1];
             String newFileName = "face-" + userId + "." + suffix;
             String finalFacePath = fileSpace + uploadPathPrefix + File.separator + newFileName;
+            fileUploadPath = uploadPathPrefix + File.separator + newFileName;
 
             File outFile = new File(finalFacePath);
             if (outFile.getParentFile() != null) {
@@ -107,7 +110,12 @@ public class CenterUserController extends BaseController {
             }
         }
 
-        return JsonResult.ok();
+        String finalUserFaceUrl = fileUpload.getImageServerUrl() + "/" + fileUploadPath + "?t=" + DateUtil.getCurrentDateString(DateUtil.DATE_PATTERN);
+        UserInfo userInfo = centerUserService.updateUserFace(userId, finalUserFaceUrl);
+
+        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfo), true);
+
+        return JsonResult.ok(userInfo);
     }
 
     private UserInfo setNullProperty(UserInfo userInfo) {
