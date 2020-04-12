@@ -86,6 +86,13 @@ public class CenterUserController extends BaseController {
 
             String fileNameArr[] = iconFileName.split("\\.");
             String suffix = fileNameArr[fileNameArr.length - 1];
+
+            if (!suffix.equalsIgnoreCase("png")
+                    && !suffix.equalsIgnoreCase("jpg")
+                    && !suffix.equalsIgnoreCase("jpeg")) {
+                return JsonResult.errorMsg("File format incorrect.");
+            }
+
             String newFileName = "face-" + userId + "." + suffix;
             String finalFacePath = fileSpace + uploadPathPrefix + File.separator + newFileName;
             fileUploadPath = uploadPathPrefix + File.separator + newFileName;
