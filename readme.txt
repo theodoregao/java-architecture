@@ -18,3 +18,4 @@
 18. Spring: Apply hibernate to validate data.
 19. Spring: Apply properties file to provide environment config for dev/prod.
 20. Spring: Apply WebMvcConfigurer to add resource handlers for local files.
+21. Spring: Restrict file upload/download size.
