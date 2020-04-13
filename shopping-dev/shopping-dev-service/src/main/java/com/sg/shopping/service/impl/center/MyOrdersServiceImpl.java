@@ -52,6 +52,7 @@ public class MyOrdersServiceImpl implements MyOrdersService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public OrderStatus updateDeliverOrderStatus(String orderId) {
         OrderStatus orderStatus = new OrderStatus();
         orderStatus.setOrderStatus(OrderStatusEnum.WAIT_RECEIVE.type);
@@ -68,6 +69,7 @@ public class MyOrdersServiceImpl implements MyOrdersService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Orders queryOrders(String userId, String orderId) {
         Orders orders = new Orders();
         orders.setId(orderId);
@@ -77,9 +79,11 @@ public class MyOrdersServiceImpl implements MyOrdersService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public OrderStatus updateConfirmReceiveOrderStatus(String orderId) {
         OrderStatus orderStatus = new OrderStatus();
         orderStatus.setOrderStatus(OrderStatusEnum.SUCCESS.type);
+        orderStatus.setSuccessTime(new Date());
 
         Example example = new Example(OrderStatus.class);
         example.createCriteria()
@@ -89,6 +93,22 @@ public class MyOrdersServiceImpl implements MyOrdersService {
         orderStatusMapper.updateByExample(orderStatus, example);
 
         return orderStatusMapper.selectByPrimaryKey(orderId);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public boolean updateDeleteOrderStatus(String userId, String orderId) {
+        Orders orders = new Orders();
+        orders.setIsDelete(YesOrNo.YES.type);
+        orders.setUpdatedTime(new Date());
+
+        Example example = new Example(Orders.class);
+        example.createCriteria()
+                .andEqualTo("id", orderId)
+                .andEqualTo("userId", userId);
+
+        int rowUpdated = ordersMapper.updateByExampleSelective(orders, example);
+        return rowUpdated == 1;
     }
 
 

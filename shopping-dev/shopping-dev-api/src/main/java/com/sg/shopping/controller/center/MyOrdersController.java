@@ -68,4 +68,28 @@ public class MyOrdersController extends BaseController {
 
         return JsonResult.ok(myOrdersService.updateConfirmReceiveOrderStatus(orderId));
     }
+
+    @ApiOperation(value = "Delete order", notes = "Delete order", httpMethod = "POST")
+    @PostMapping("/delete")
+    public JsonResult delete(
+            @ApiParam(name = "orderId", value = "Order Id", required = true)
+            @RequestParam String orderId,
+            @ApiParam(name = "userId", value = "User Id", required = true)
+            @RequestParam String userId) {
+        if (StringUtils.isBlank(orderId) || StringUtils.isBlank(userId)) {
+            return JsonResult.errorMsg("Order id cannot be null");
+        }
+
+        if (myOrdersService.queryOrders(userId, orderId) == null) {
+            return JsonResult.errorMsg("userId and orderId not match");
+        }
+
+        boolean deleteSuccess = myOrdersService.updateDeleteOrderStatus(userId, orderId);
+
+        if (deleteSuccess) {
+            return JsonResult.ok();
+        } else {
+            return JsonResult.errorMsg("delete failed");
+        }
+    }
 }

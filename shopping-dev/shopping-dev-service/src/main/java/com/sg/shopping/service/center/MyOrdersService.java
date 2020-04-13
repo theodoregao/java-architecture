@@ -13,4 +13,6 @@ public interface MyOrdersService {
     Orders queryOrders(String userId, String orderId);
 
     OrderStatus updateConfirmReceiveOrderStatus(String orderId);
+
+    boolean updateDeleteOrderStatus(String userId, String orderId);
 }
