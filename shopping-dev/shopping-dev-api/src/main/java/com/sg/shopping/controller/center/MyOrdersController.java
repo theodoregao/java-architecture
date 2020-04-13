@@ -18,6 +18,16 @@ public class MyOrdersController extends BaseController {
     @Autowired
     private MyOrdersService myOrdersService;
 
+    @PostMapping("/statusCounts")
+    @ApiOperation(value = "Query order status count", httpMethod = "POST")
+    public JsonResult statusCount(
+            @ApiParam(name = "userId", value = "userId", required = true) @RequestParam String userId) {
+        if (StringUtils.isBlank(userId)) {
+            return JsonResult.errorMsg(null);
+        }
+        return JsonResult.ok(myOrdersService.getOrderStatusCounts(userId));
+    }
+
     @PostMapping("/query")
     @ApiOperation(value = "Query user orders", httpMethod = "POST")
     public JsonResult catItems(
