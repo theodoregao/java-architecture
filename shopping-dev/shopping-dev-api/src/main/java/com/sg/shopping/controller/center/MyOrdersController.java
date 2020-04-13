@@ -39,4 +39,15 @@ public class MyOrdersController extends BaseController {
 
         return JsonResult.ok(myOrdersService.queryMyOrders(userId, orderStatus, page, pageSize));
     }
+
+    @ApiOperation(value = "Merchant deliver", notes = "Mimic merchant deliver", httpMethod = "GET")
+    @GetMapping("/deliver")
+    public JsonResult deliver(
+            @ApiParam(name = "orderId", value = "Order Id", required = true)
+            @RequestParam String orderId) throws Exception {
+        if (StringUtils.isBlank(orderId)) {
+            return JsonResult.errorMsg("Order id cannot be null");
+        }
+        return JsonResult.ok(myOrdersService.updateDeliverOrderStatus(orderId));
+    }
 }
