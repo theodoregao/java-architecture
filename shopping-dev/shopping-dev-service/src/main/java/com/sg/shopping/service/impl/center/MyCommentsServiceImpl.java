@@ -1,12 +1,15 @@
 package com.sg.shopping.service.impl.center;
 
+import com.github.pagehelper.PageHelper;
 import com.sg.shopping.common.enums.YesOrNo;
+import com.sg.shopping.common.utils.PagedGridResult;
 import com.sg.shopping.mapper.*;
 import com.sg.shopping.pojo.OrderItems;
 import com.sg.shopping.pojo.OrderStatus;
 import com.sg.shopping.pojo.Orders;
 import com.sg.shopping.pojo.bo.center.OrderItemsCommentBO;
 import com.sg.shopping.service.center.MyCommentsService;
+import com.sg.shopping.service.impl.BaseService;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class MyCommentsServiceImpl implements MyCommentsService {
+public class MyCommentsServiceImpl extends BaseService implements MyCommentsService {
 
     @Autowired
     Sid sid;
@@ -65,5 +68,14 @@ public class MyCommentsServiceImpl implements MyCommentsService {
         orderStatus.setOrderId(orderId);
         orderStatus.setCommentTime(new Date());
         orderStatusMapper.updateByPrimaryKeySelective(orderStatus);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public PagedGridResult queryMyComments(String userId, Integer page, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+        PageHelper.startPage(page, pageSize);
+        return setterPagedGrid(itemsCommentsMapperCustom.queryMyComments(map), page);
     }
 }

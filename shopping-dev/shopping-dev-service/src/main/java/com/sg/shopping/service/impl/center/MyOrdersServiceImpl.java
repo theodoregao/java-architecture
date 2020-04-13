@@ -12,6 +12,7 @@ import com.sg.shopping.pojo.OrderStatus;
 import com.sg.shopping.pojo.Orders;
 import com.sg.shopping.pojo.vo.MyOrdersVO;
 import com.sg.shopping.service.center.MyOrdersService;
+import com.sg.shopping.service.impl.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class MyOrdersServiceImpl implements MyOrdersService {
+public class MyOrdersServiceImpl extends BaseService implements MyOrdersService {
 
     @Autowired
     OrdersMapper ordersMapper;
@@ -109,17 +110,5 @@ public class MyOrdersServiceImpl implements MyOrdersService {
 
         int rowUpdated = ordersMapper.updateByExampleSelective(orders, example);
         return rowUpdated == 1;
-    }
-
-
-    private PagedGridResult setterPagedGrid(List<?> list, Integer page) {
-        PageInfo<?> pageList = new PageInfo<>(list);
-        PagedGridResult pagedGridResult = new PagedGridResult();
-        pagedGridResult.setPage(page);
-        pagedGridResult.setRows(list);
-        pagedGridResult.setTotal(pageList.getPages());
-        pagedGridResult.setRecords(pageList.getTotal());
-
-        return pagedGridResult;
     }
 }

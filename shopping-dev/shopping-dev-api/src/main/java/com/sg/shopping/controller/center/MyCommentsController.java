@@ -1,7 +1,9 @@
 package com.sg.shopping.controller.center;
 
+import com.github.pagehelper.PageInfo;
 import com.sg.shopping.common.enums.YesOrNo;
 import com.sg.shopping.common.utils.JsonResult;
+import com.sg.shopping.common.utils.PagedGridResult;
 import com.sg.shopping.controller.BaseController;
 import com.sg.shopping.pojo.Orders;
 import com.sg.shopping.pojo.bo.center.OrderItemsCommentBO;
@@ -74,5 +76,39 @@ public class MyCommentsController extends BaseController {
         myCommentsService.saveComments(orderId, userId, commentList);
 
         return JsonResult.ok();
+    }
+
+    @PostMapping("/query")
+    @ApiOperation(value = "Query comments", notes = "Query comments", httpMethod = "POST")
+    public JsonResult query(
+            @ApiParam(name = "userId", value = "userId", required = true) @RequestParam String userId,
+            @ApiParam(name = "page", value = "page", required = false) @RequestParam Integer page,
+            @ApiParam(name = "pageSize", value = "pageSize", required = false) @RequestParam Integer pageSize) {
+        if (StringUtils.isBlank(userId)) {
+            return JsonResult.errorMsg(null);
+        }
+
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = COMMON_PAGE_SIZE;
+        }
+
+        return JsonResult.ok(myCommentsService.queryMyComments(userId, page, pageSize));
+    }
+
+
+
+    private PagedGridResult setterPagedGrid(List<?> list, Integer page) {
+        PageInfo<?> pageList = new PageInfo<>(list);
+        PagedGridResult pagedGridResult = new PagedGridResult();
+        pagedGridResult.setPage(page);
+        pagedGridResult.setRows(list);
+        pagedGridResult.setTotal(pageList.getPages());
+        pagedGridResult.setRecords(pageList.getTotal());
+
+        return pagedGridResult;
     }
 }

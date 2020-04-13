@@ -19,3 +19,4 @@
 19. Spring: Apply properties file to provide environment config for dev/prod.
 20. Spring: Apply WebMvcConfigurer to add resource handlers for local files.
 21. Spring: Restrict file upload/download size.
+22. MyBatis: Not support nested result: https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/Important.md.
