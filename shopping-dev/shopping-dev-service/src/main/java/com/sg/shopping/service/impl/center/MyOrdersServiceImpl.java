@@ -3,10 +3,13 @@ package com.sg.shopping.service.impl.center;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sg.shopping.common.enums.OrderStatusEnum;
+import com.sg.shopping.common.enums.YesOrNo;
 import com.sg.shopping.common.utils.PagedGridResult;
 import com.sg.shopping.mapper.OrderStatusMapper;
+import com.sg.shopping.mapper.OrdersMapper;
 import com.sg.shopping.mapper.OrdersMapperCustom;
 import com.sg.shopping.pojo.OrderStatus;
+import com.sg.shopping.pojo.Orders;
 import com.sg.shopping.pojo.vo.MyOrdersVO;
 import com.sg.shopping.service.center.MyOrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,9 @@ import java.util.Map;
 
 @Service
 public class MyOrdersServiceImpl implements MyOrdersService {
+
+    @Autowired
+    OrdersMapper ordersMapper;
 
     @Autowired
     OrdersMapperCustom ordersMapperCustom;
@@ -55,6 +61,30 @@ public class MyOrdersServiceImpl implements MyOrdersService {
         example.createCriteria()
                 .andEqualTo("orderId", orderId)
                 .andEqualTo("orderStatus", OrderStatusEnum.WAIT_DELIVER.type);
+
+        orderStatusMapper.updateByExample(orderStatus, example);
+
+        return orderStatusMapper.selectByPrimaryKey(orderId);
+    }
+
+    @Override
+    public Orders queryOrders(String userId, String orderId) {
+        Orders orders = new Orders();
+        orders.setId(orderId);
+        orders.setUserId(userId);
+        orders.setIsDelete(YesOrNo.NO.type);
+        return ordersMapper.selectOne(orders);
+    }
+
+    @Override
+    public OrderStatus updateConfirmReceiveOrderStatus(String orderId) {
+        OrderStatus orderStatus = new OrderStatus();
+        orderStatus.setOrderStatus(OrderStatusEnum.SUCCESS.type);
+
+        Example example = new Example(OrderStatus.class);
+        example.createCriteria()
+                .andEqualTo("orderId", orderId)
+                .andEqualTo("orderStatus", OrderStatusEnum.WAIT_RECEIVE.type);
 
         orderStatusMapper.updateByExample(orderStatus, example);
 

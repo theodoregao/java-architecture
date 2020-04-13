@@ -44,10 +44,28 @@ public class MyOrdersController extends BaseController {
     @GetMapping("/deliver")
     public JsonResult deliver(
             @ApiParam(name = "orderId", value = "Order Id", required = true)
-            @RequestParam String orderId) throws Exception {
+            @RequestParam String orderId) {
         if (StringUtils.isBlank(orderId)) {
             return JsonResult.errorMsg("Order id cannot be null");
         }
         return JsonResult.ok(myOrdersService.updateDeliverOrderStatus(orderId));
+    }
+
+    @ApiOperation(value = "User confirm received", notes = "User confirm received", httpMethod = "POST")
+    @PostMapping("/confirmReceive")
+    public JsonResult confirmReceive(
+            @ApiParam(name = "orderId", value = "Order Id", required = true)
+            @RequestParam String orderId,
+            @ApiParam(name = "userId", value = "User Id", required = true)
+            @RequestParam String userId) {
+        if (StringUtils.isBlank(orderId) || StringUtils.isBlank(userId)) {
+            return JsonResult.errorMsg("Order id cannot be null");
+        }
+
+        if (myOrdersService.queryOrders(userId, orderId) == null) {
+            return JsonResult.errorMsg("userId and orderId not match");
+        }
+
+        return JsonResult.ok(myOrdersService.updateConfirmReceiveOrderStatus(orderId));
     }
 }
