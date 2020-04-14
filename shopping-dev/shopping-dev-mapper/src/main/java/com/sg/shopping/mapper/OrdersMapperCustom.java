@@ -1,5 +1,6 @@
 package com.sg.shopping.mapper;
 
+import com.sg.shopping.pojo.OrderStatus;
 import com.sg.shopping.pojo.vo.MyOrdersVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,4 +13,5 @@ public interface OrdersMapperCustom {
 
     int getMyOrderStatusCounts(@Param("paramsMap") Map<String, Object> map);
 
+    List<OrderStatus> getMyOrderTrend(@Param("paramsMap") Map<String, Object> map);
 }

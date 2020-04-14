@@ -102,4 +102,25 @@ public class MyOrdersController extends BaseController {
             return JsonResult.errorMsg("delete failed");
         }
     }
+
+    @PostMapping("/trend")
+    @ApiOperation(value = "Query user orders trend", httpMethod = "POST")
+    public JsonResult trend(
+            @ApiParam(name = "userId", value = "userId", required = true) @RequestParam String userId,
+            @ApiParam(name = "page", value = "page", required = false) @RequestParam Integer page,
+            @ApiParam(name = "pageSize", value = "pageSize", required = false) @RequestParam Integer pageSize) {
+        if (StringUtils.isBlank(userId)) {
+            return JsonResult.errorMsg(null);
+        }
+
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = COMMON_PAGE_SIZE;
+        }
+
+        return JsonResult.ok(myOrdersService.getMyOrderTrend(userId, page, pageSize));
+    }
 }
