@@ -22,3 +22,4 @@
 22. MyBatis: Not support nested result: https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/Important.md.
 23. MariaDB: https://mariadb.org/
 24. Spring: Apply multiple application-xxx.yml for multiple build environment.
+25. Spring: Config and package as war.

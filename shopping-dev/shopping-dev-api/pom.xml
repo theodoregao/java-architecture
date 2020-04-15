@@ -11,6 +11,8 @@
 
     <artifactId>shopping-dev-api</artifactId>
 
+    <packaging>war</packaging>
+
     <dependencies>
         <dependency>
             <groupId>com.sg.shoping</groupId>
