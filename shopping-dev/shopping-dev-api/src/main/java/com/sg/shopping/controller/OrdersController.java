@@ -66,8 +66,8 @@ public class OrdersController extends BaseController {
         return JsonResult.ok(orderId);
     }
 
-    @PostMapping("notifyMerchantOrderPaid")
-    public Integer notifyMerchantOrderPaid(String merchantOrderId) {
+    @PostMapping("notifyPaid")
+    public Integer notifyPaid(String merchantOrderId) {
         orderService.updateOrderStatus(merchantOrderId, OrderStatusEnum.WAIT_DELIVER.type);
         return HttpStatus.OK.value();
     }
