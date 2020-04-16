@@ -25,3 +25,4 @@
 25. Spring: Config and package as war.
 26. nginx: http://nginx.org/
 27. crontab: Apply crontab to schedule some command: https://bencane.com/2012/09/03/cheat-sheet-crontab-by-example/
+28. SwitchHosts: Manage hosts with SwithHosts. https://oldj.github.io/SwitchHosts/
