@@ -1,0 +1,48 @@
+
+Nginx 日志切割-定时
+使用定时任务
+
+    安装定时任务：
+
+    yum install crontabs
+
+    crontab -e 编辑并且添加一行新的任务：
+
+    */1 * * * * /usr/local/nginx/sbin/cut_my_log.sh
+
+    重启定时任务：
+
+    service crond restart
+
+    附：常用定时任务命令：
+
+    service crond start         //启动服务
+    service crond stop          //关闭服务
+    service crond restart       //重启服务
+    service crond reload        //重新载入配置
+    crontab -e                  // 编辑任务
+    crontab -l                  // 查看任务列表
+
+定时任务表达式：
+
+Cron表达式是，分为5或6个域，每个域代表一个含义，如下所示：
+	分 	时 	日 	月 	星期几 	年（可选）
+取值范围 	0-59 	0-23 	1-31 	1-12 	1-7 	2019/2020/2021/…
+常用表达式：
+
+    每分钟执行：
+
+    */1 * * * *
+
+    每日凌晨（每天晚上23:59）执行：
+
+    59 23 * * *
+
+    每日凌晨1点执行：
+
+    0 1 * * *
+
+参考文献：
+
+    每天定时为数据库备份：https://www.cnblogs.com/leechenxiang/p/7110382.html
+

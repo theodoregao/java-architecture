@@ -23,3 +23,5 @@
 23. MariaDB: https://mariadb.org/
 24. Spring: Apply multiple application-xxx.yml for multiple build environment.
 25. Spring: Config and package as war.
+26. nginx: http://nginx.org/
+27. crontab: Apply crontab to schedule some command: https://bencane.com/2012/09/03/cheat-sheet-crontab-by-example/
