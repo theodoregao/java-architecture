@@ -15,8 +15,10 @@ public class CorsConfig {
     public CorsFilter getCorsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:8080");
-        config.addAllowedOrigin("http://ubuntuserver:8080");
-        config.addAllowedOrigin("http://ubuntuserver:8088");
+        config.addAllowedOrigin("http://nginxserver:80");
+        config.addAllowedOrigin("http://nginxserver:8080");
+        config.addAllowedOrigin("http://nginxserver:8088");
+        config.addAllowedOrigin("*");
         config.setAllowCredentials(true);
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");

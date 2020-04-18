@@ -66,6 +66,13 @@ public class OrdersController extends BaseController {
         return JsonResult.ok(orderId);
     }
 
+    @PostMapping("updateCode")
+    @ApiOperation(value = "Update code", notes = "Update code for return url", httpMethod = "POST")
+    public JsonResult updateCode(@RequestParam String code) {
+        updateReturnUrl(code);
+        return JsonResult.ok();
+    }
+
     @PostMapping("notifyPaid")
     public Integer notifyPaid(String merchantOrderId) {
         orderService.updateOrderStatus(merchantOrderId, OrderStatusEnum.WAIT_DELIVER.type);

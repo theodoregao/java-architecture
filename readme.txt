@@ -26,3 +26,6 @@
 26. nginx: http://nginx.org/
 27. crontab: Apply crontab to schedule some command: https://bencane.com/2012/09/03/cheat-sheet-crontab-by-example/
 28. SwitchHosts: Manage hosts with SwithHosts. https://oldj.github.io/SwitchHosts/
+29. JMeter: load test functional behavior and measure performance. https://jmeter.apache.org/
+30. Consistent hashing: Resolve node add/remove but keep the data consistent. https://en.wikipedia.org/wiki/Consistent_hashing
+31. Nginx: Upstream mode - load balancing algorithm (ip hash, url hash, least_conn) http://nginx.org/en/docs/http/ngx_http_upstream_module.html

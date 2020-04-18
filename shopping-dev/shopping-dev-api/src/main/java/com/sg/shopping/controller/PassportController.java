@@ -72,7 +72,7 @@ public class PassportController {
         return JsonResult.ok(userInfo);
     }
 
-    @ApiOperation(value = "Check whether the new username is available", httpMethod = "POST")
+    @ApiOperation(value = "Login with username and password", httpMethod = "POST")
     @PostMapping("/login")
     public JsonResult login(@RequestBody UserInfoBO userInfoBO,
                             HttpServletRequest request,
