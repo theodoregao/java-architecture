@@ -1,0 +1,41 @@
+Keepalived配置Nginx自动重启
+1. 增加Nginx重启检测脚本
+
+vim /etc/keepalived/check_nginx_alive_or_not.sh
+
+#!/bin/bash
+
+A=`ps -C nginx --no-header |wc -l`
+# 判断nginx是否宕机，如果宕机了，尝试重启
+if [ $A -eq 0 ];then
+    /usr/local/nginx/sbin/nginx
+    # 等待一小会再次检查nginx，如果没有启动成功，则停止keepalived，使其启动备用机
+    sleep 3
+    if [ `ps -C nginx --no-header |wc -l` -eq 0 ];then
+        killall keepalived
+    fi
+fi
+
+    增加运行权限
+
+    chmod +x /etc/keepalived/check_nginx_alive_or_not.sh
+
+2. 配置keepalived监听nginx脚本
+
+vrrp_script check_nginx_alive {
+    script "/etc/keepalived/check_nginx_alive_or_not.sh"
+    interval 2 # 每隔两秒运行上一行脚本
+    weight 10 # 如果脚本运行成功，则升级权重+10
+    # weight -10 # 如果脚本运行失败，则升级权重-10
+}
+
+3. 在vrrp_instance中新增监控的脚本
+
+track_script {
+    check_nginx_alive   # 追踪 nginx 脚本
+}
+
+4. 重启Keepalived使得配置文件生效
+
+systemctl restart keepalived
+

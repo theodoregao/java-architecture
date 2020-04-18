@@ -1,0 +1,38 @@
+配置 Keepalived - 备
+1. 通过命令 vim keepalived.conf 打开配置文件
+
+global_defs {
+   router_id keep_172
+}
+
+vrrp_instance VI_1 {
+    # 备用机设置为BACKUP
+    state BACKUP
+    interface ens33
+    virtual_router_id 51
+    # 权重低于MASTER
+    priority 80
+    advert_int 2
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+        # 注意：主备两台的vip都是一样的，绑定到同一个vip
+        192.168.1.161
+    }
+}
+
+2. 启动 Keepalived
+
+# 启动keepalived
+systemctl start keepalived
+# 停止keepalived
+systemctl stop keepalived
+# 重启keepalived
+systemctl restart keepalived
+
+3. 查看进程
+
+ps -ef|grep keepalived
+
