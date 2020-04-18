@@ -1,0 +1,9 @@
+LVS http://www.linux-vs.org/
+
+1. ifconfig config virtual IP
+
+2. 配置arp
+
+3. ipvsadm
+
+4. keepalived配置集群服务

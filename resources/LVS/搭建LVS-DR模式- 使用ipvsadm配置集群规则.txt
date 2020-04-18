@@ -1,0 +1,55 @@
+搭建LVS-DR模式- 使用ipvsadm配置集群规则
+
+    创建LVS节点，用户访问的集群调度者
+
+    ipvsadm -A -t 192.168.1.150:80 -s rr -p 5
+
+        -A：添加集群
+        -t：tcp协议
+        ip地址：设定集群的访问ip，也就是LVS的虚拟ip
+        -s：设置负载均衡的算法，rr表示轮询
+        -p：设置连接持久化的时间
+
+    创建2台RS真实服务器
+
+    ipvsadm -a -t 192.168.1.150:80 -r 192.168.1.171:80 -g
+    ipvsadm -a -t 192.168.1.150:80 -r 192.168.1.172:80 -g
+
+        -a：添加真实服务器
+        -t：tcp协议
+        -r：真实服务器的ip地址
+        -g：设定DR模式
+
+    保存到规则库，否则重启失效
+
+    ipvsadm -S
+
+    检查集群
+
+        查看集群列表
+
+        ipvsadm -Ln
+
+        查看集群状态
+
+        ipvsadm -Ln --stats
+
+    其他命令：
+
+    # 重启ipvsadm，重启后需要重新配置
+    service ipvsadm restart
+    # 查看持久化连接
+    ipvsadm -Ln --persistent-conn
+    # 查看连接请求过期时间以及请求源ip和目标ip
+    ipvsadm -Lnc
+    
+    # 设置tcp tcpfin udp 的过期时间（一般保持默认）
+    ipvsadm --set 1 1 1
+    # 查看过期时间
+    ipvsadm -Ln --timeout
+
+    更详细的帮助文档：
+
+    ipvsadm -h
+    man ipvsadm
+

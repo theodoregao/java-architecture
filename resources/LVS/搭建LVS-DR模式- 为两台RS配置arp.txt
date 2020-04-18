@@ -1,0 +1,37 @@
+搭建LVS-DR模式- 为两台RS配置arp
+ARP响应级别与通告行为 的概念
+
+    arp-ignore：ARP响应级别（处理请求）
+        0：只要本机配置了ip，就能响应请求
+        1：请求的目标地址到达对应的网络接口，才会响应请求
+
+    arp-announce：ARP通告行为（返回响应）
+        0：本机上任何网络接口都向外通告，所有的网卡都能接受到通告
+        1：尽可能避免本网卡与不匹配的目标进行通告
+        2：只在本网卡通告
+
+配置ARP
+
+    打开sysctl.conf:
+
+    vim /etc/sysctl.conf
+
+    配置所有网卡、默认网卡以及虚拟网卡的arp响应级别和通告行为，分别对应：all，default，lo：
+
+    # configration for lvs
+    net.ipv4.conf.all.arp_ignore = 1
+    net.ipv4.conf.default.arp_ignore = 1
+    net.ipv4.conf.lo.arp_ignore = 1
+
+    net.ipv4.conf.all.arp_announce = 2
+    net.ipv4.conf.default.arp_announce = 2
+    net.ipv4.conf.lo.arp_announce = 2
+
+    刷新配置文件：
+
+增加一个网关，用于接收数据报文，当有请求到本机后，会交给lo去处理：
+
+    防止重启失效，做如下处理，用于开机自启动：
+
+echo "route add -host 192.168.1.150 dev lo:1" >> /etc/rc.local
+
