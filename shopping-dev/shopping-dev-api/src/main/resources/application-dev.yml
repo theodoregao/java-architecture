@@ -5,6 +5,11 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/shopping?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
     password: root
+  redis:
+    database: 0
+    host: 192.168.86.150
+    port: 6379
+    password: m0veFast!
 
 mybatis:
   configuration:

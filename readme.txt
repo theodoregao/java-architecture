@@ -31,4 +31,4 @@
 31. Nginx: Upstream mode - load balancing algorithm (ip hash, url hash, least_conn) http://nginx.org/en/docs/http/ngx_http_upstream_module.html
 32. Keepalived: Virtual IP, 双主热备 https://www.keepalived.org/
 33. LVS: Linux Virtual Server. http://www.linux-vs.org/
-34. Redis: https://redis.io/
+34. Redis: https://redis.io/  free redis client: https://github.com/caoxinyu/RedisClient
