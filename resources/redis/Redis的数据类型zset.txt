@@ -1,0 +1,22 @@
+Redis的数据类型 - zset
+sorted set：
+
+sorted set：排序的set，可以去重可以排序，比如可以根据用户积分做排名，积分作为set的一个数值，根据数值可以做排序。set中的每一个memeber都带有一个分数
+使用
+
+zadd zset 10 value1 20 value2 30 value3：设置member和对应的分数
+
+zrange zset 0 -1：查看所有zset中的内容
+zrange zset 0 -1 withscores：带有分数
+
+zrank zset value：获得对应的下标
+zscore zset value：获得对应的分数
+
+zcard zset：统计个数
+zcount zset 分数1 分数2：统计个数
+
+zrangebyscore zset 分数1 分数2：查询分数之间的member(包含分数1 分数2)
+zrangebyscore zset (分数1 (分数2：查询分数之间的member（不包含分数1 和 分数2）
+zrangebyscore zset 分数1 分数2 limit start end：查询分数之间的member(包含分数1 分数2)，获得的结果集再次根据下标区间做查询
+
+zrem zset value：删除member

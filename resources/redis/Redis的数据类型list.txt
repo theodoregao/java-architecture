@@ -1,0 +1,25 @@
+Redis的数据类型list
+list
+
+list：列表，[a, b, c, d, …]
+使用
+
+lpush userList 1 2 3 4 5：构建一个list，从左边开始存入数据
+rpush userList 1 2 3 4 5：构建一个list，从右边开始存入数据
+lrange list start end：获得数据
+
+lpop：从左侧开始拿出一个数据
+rpop：从右侧开始拿出一个数据
+
+pig cow sheep chicken duck
+
+llen list：list长度
+lindex list index：获取list下标的值
+
+lset list index value：把某个下标的值替换
+
+linsert list before/after value：插入一个新的值
+
+lrem list num value：删除几个相同数据
+
+ltrim list start end：截取值，替换原来的list

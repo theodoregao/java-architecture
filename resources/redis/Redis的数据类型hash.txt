@@ -1,0 +1,33 @@
+Redis的数据类型hash
+hash
+
+hash：类似map，存储结构化数据结构，比如存储一个对象（不能有嵌套对象）
+使用
+
+hset key property value：
+-> hset user name imooc
+-> 创建一个user对象，这个对象中包含name属性，name值为imooc
+
+hget user name：获得用户对象中name的值
+
+hmset：设置对象中的多个键值对
+-> hset user age 18 phone 139123123
+hmsetnx：设置对象中的多个键值对，存在则不添加
+-> hset user age 18 phone 139123123
+
+hmget：获得对象中的多个属性
+-> hmget user age phone
+
+hgetall user：获得整个对象的内容
+
+hincrby user age 2：累加属性
+hincrbyfloat user age 2.2：累加属性
+
+hlen user：有多少个属性
+
+hexists user age：判断属性是否存在
+
+hkeys user：获得所有属性
+hvals user：获得所有值
+
+hdel user：删除对象

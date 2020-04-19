@@ -1,0 +1,38 @@
+Redis的数据类型 - string
+string 字符串
+
+string: 最简单的字符串类型键值对缓存，也是最基本的
+key相关
+
+keys *：查看所有的key (不建议在生产上使用，有性能影响)
+
+type key：key的类型
+string类型
+
+get/set/del：查询/设置/删除
+set rekey data：设置已经存在的key，会覆盖
+setnx rekey data：设置已经存在的key，不会覆盖
+
+set key value ex time：设置带过期时间的数据
+expire key：设置过期时间
+ttl：查看剩余时间，-1永不过期，-2过期
+
+append key：合并字符串
+strlen key：字符串长度
+
+incr key：累加1
+decr key：类减1
+incrby key num：累加给定数值
+decrby key num：累减给定数值
+
+getrange key start end：截取数据，end=-1 代表到最后
+setrange key start newdata：从start位置开始替换数据
+
+mset：连续设值
+mget：连续取值
+msetnx：连续设置，如果存在则不设置
+其他
+
+select index：切换数据库，总共默认16个
+flushdb：删除当前下边db中的数据
+flushall：删除所有db中的数据

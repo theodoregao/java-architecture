@@ -1,0 +1,24 @@
+安装与配置 Redis
+1. https://redis.io/download
+2. unzip
+3. copy utils/redis_init_script to /etc/init.d/
+4. mkdir /usr/local/redis/working
+5. copy redis.conf to /usr/local/redis
+6. edit redis.conf
+  1. daemonize -> yes
+  2. dir -> /usr/local/redis/working
+  3. bind -> 0.0.0.0
+  4. requirepass -> m0veFast!
+  5. port
+  6. pidfile
+  7. databases
+7. edit redis_init_script
+  1. CONF="/usr/local/redis/redis.config"
+  2. #chkconfig: 22345 10 90
+     #description: Start and Stop redis
+  3. CLIEXEC - redis-cli
+  4. stop)
+       $CLIEXEC -a "password" -p $REDISPORT shutdown
+8. chomd 777 redis_init_script
+9. /etc/init.d/redis_init_script start
+10. chkconfig redis_init_script on # 开机自启动

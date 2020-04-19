@@ -1,0 +1,20 @@
+Redis的数据类型set
+
+sadd set aa bb cc dd cc dd
+smembers set
+
+scard set -> count
+sismember set aa
+
+srem set aa
+
+spop set [count]
+
+srandommember set [count] -> random pick from set
+
+smove source destination value -> move value from source to destination
+
+交并差
+sdiff set1 set2 -> set1 - set2
+sinter set1 set2 -> set1 && set2
+sunion set1 set2 -> set1 || set2
