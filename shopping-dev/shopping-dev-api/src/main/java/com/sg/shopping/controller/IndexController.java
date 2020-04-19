@@ -75,7 +75,7 @@ public class IndexController {
             return JsonResult.errorMsg("");
         }
 
-        String subCatKey = "sub_cat_" + rootCategoryId;
+        String subCatKey = "subcat:" + rootCategoryId;
         List<CategoryVO> list = new ArrayList<>();
         String catsStr = redisOperator.get(subCatKey);
         if (StringUtils.isBlank(catsStr)) {
