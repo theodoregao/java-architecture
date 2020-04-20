@@ -7,6 +7,7 @@ import com.sg.shopping.mapper.OrderItemsMapper;
 import com.sg.shopping.mapper.OrderStatusMapper;
 import com.sg.shopping.mapper.OrdersMapper;
 import com.sg.shopping.pojo.*;
+import com.sg.shopping.pojo.bo.ShopcartBO;
 import com.sg.shopping.pojo.bo.SubmitOrderBO;
 import com.sg.shopping.pojo.vo.MerchantOrdersVO;
 import com.sg.shopping.pojo.vo.OrderVO;
@@ -45,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public OrderVO createOrder(SubmitOrderBO submitOrderBO) {
+    public OrderVO createOrder(List<ShopcartBO> shopcartList, SubmitOrderBO submitOrderBO) {
         String userId = submitOrderBO.getUserId();
         String addressId = submitOrderBO.getAddressId();
         String itemSpecIds = submitOrderBO.getItemSpecIds();
@@ -78,8 +79,9 @@ public class OrderServiceImpl implements OrderService {
         Integer totalAmount = 0;
         Integer realPayAmount = 0;
         for (String specId: specIds) {
+            ShopcartBO cartItem = getBuyCountsFromShopcart(shopcartList, specId);
+            int buyCounts = cartItem.getBuyCounts();
             ItemsSpec itemsSpec = itemService.queryItemSpecById(specId);
-            int buyCounts = 1;
             totalAmount += itemsSpec.getPriceNormal() * buyCounts;
             realPayAmount += itemsSpec.getPriceDiscount() * buyCounts;
 
@@ -164,5 +166,14 @@ public class OrderServiceImpl implements OrderService {
         orderStatus.setOrderStatus(OrderStatusEnum.CLOSE.type);
         orderStatus.setCloseTime(new Date());
         orderStatusMapper.updateByPrimaryKey(orderStatus);
+    }
+
+    private ShopcartBO getBuyCountsFromShopcart(List<ShopcartBO> shopcartList, String specId) {
+        for (ShopcartBO cart : shopcartList) {
+            if (cart.getSpecId().equals(specId)) {
+                return cart;
+            }
+        }
+        return null;
     }
 }

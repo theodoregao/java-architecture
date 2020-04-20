@@ -4,12 +4,16 @@ import com.sg.shopping.common.enums.OrderStatusEnum;
 import com.sg.shopping.common.enums.PayMethod;
 import com.sg.shopping.common.utils.CookieUtils;
 import com.sg.shopping.common.utils.JsonResult;
+import com.sg.shopping.common.utils.JsonUtils;
+import com.sg.shopping.common.utils.RedisOperator;
+import com.sg.shopping.pojo.bo.ShopcartBO;
 import com.sg.shopping.pojo.bo.SubmitOrderBO;
 import com.sg.shopping.pojo.vo.MerchantOrdersVO;
 import com.sg.shopping.pojo.vo.OrderVO;
 import com.sg.shopping.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Api(value = "Order related APIs", tags = {"Order related APIs"})
 @RestController
@@ -29,6 +34,9 @@ public class OrdersController extends BaseController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private RedisOperator redisOperator;
+
     @PostMapping("/create")
     @ApiOperation(value = "create", notes = "Create a new order", httpMethod = "POST")
     public JsonResult create(@RequestBody SubmitOrderBO submitOrderBO,
@@ -39,10 +47,14 @@ public class OrdersController extends BaseController {
             JsonResult.errorMsg("Not supported pay method");
         }
 
+        String shopcartJson = redisOperator.get(FOODIE_SHOPCART + ":" + submitOrderBO.getUserId());
+        if (StringUtils.isBlank(shopcartJson)) {
+            return JsonResult.errorMsg("shopping cart data incorrect");
+        }
 
-        OrderVO orderVO = orderService.createOrder(submitOrderBO);
-//        CookieUtils.setCookie(request, response, FOODIE_SHOPCART, "", true);
+        List<ShopcartBO> shopcartList = JsonUtils.jsonToList(shopcartJson, ShopcartBO.class);
 
+        OrderVO orderVO = orderService.createOrder(shopcartList, submitOrderBO);
         String orderId = orderVO.getOrderId();
 
         MerchantOrdersVO merchantOrdersVO = orderVO.getMerchantOrdersVO();
