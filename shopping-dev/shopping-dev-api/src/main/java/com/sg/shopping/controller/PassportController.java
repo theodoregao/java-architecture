@@ -1,10 +1,8 @@
 package com.sg.shopping.controller;
 
-import com.sg.shopping.common.utils.CookieUtils;
-import com.sg.shopping.common.utils.JsonResult;
-import com.sg.shopping.common.utils.JsonUtils;
-import com.sg.shopping.common.utils.MD5Utils;
+import com.sg.shopping.common.utils.*;
 import com.sg.shopping.pojo.UserInfo;
+import com.sg.shopping.pojo.bo.ShopcartBO;
 import com.sg.shopping.pojo.bo.UserInfoBO;
 import com.sg.shopping.service.UserService;
 import io.swagger.annotations.Api;
@@ -16,14 +14,19 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("passport")
 @Api(value = "Register & login", tags = {"Provide APIs for register and login"})
-public class PassportController {
+public class PassportController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RedisOperator redisOperator;
 
     @ApiOperation(value = "Check whether the new username is available", httpMethod = "GET")
     @GetMapping("/isNewUsernameAvailable")
@@ -67,6 +70,7 @@ public class PassportController {
 
         if (userInfo != null) {
             CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfo), true);
+            syncShopcartData(userInfo.getId(), request, response);
         }
 
         return JsonResult.ok(userInfo);
@@ -94,6 +98,7 @@ public class PassportController {
         userInfo = setNullProperty(userInfo);
 
         CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfo), true);
+        syncShopcartData(userInfo.getId(), request, response);
 
         return JsonResult.ok(userInfo);
     }
@@ -104,6 +109,7 @@ public class PassportController {
                              HttpServletRequest request,
                              HttpServletResponse response) {
         CookieUtils.deleteCookie(request, response, "user");
+        CookieUtils.deleteCookie(request, response, FOODIE_SHOPCART);
         return JsonResult.ok();
     }
 
@@ -115,6 +121,42 @@ public class PassportController {
         userInfo.setCreatedTime(null);
         userInfo.setUpdatedTime(null);
         return userInfo;
+    }
+
+    private void syncShopcartData(String userId,
+                                  HttpServletRequest request,
+                                  HttpServletResponse response) {
+        String shopcartJsonRedis = redisOperator.get(FOODIE_SHOPCART + ":" + userId);
+        String shopcartJsonCookie = CookieUtils.getCookieValue(request, FOODIE_SHOPCART, true);
+
+        if (StringUtils.isBlank(shopcartJsonRedis)) {
+            shopcartJsonRedis = "[]";
+        }
+        if (StringUtils.isBlank(shopcartJsonCookie)) {
+            shopcartJsonCookie = "[]";
+        }
+
+        List<ShopcartBO> listRedis = JsonUtils.jsonToList(shopcartJsonRedis, ShopcartBO.class);
+        List<ShopcartBO> listCookie = JsonUtils.jsonToList(shopcartJsonCookie, ShopcartBO.class);
+
+        List<ShopcartBO> pendingDeleteList = new ArrayList<>();
+        for (ShopcartBO redisShopcart: listRedis) {
+            String redisSpecId = redisShopcart.getSpecId();
+
+            for (ShopcartBO cookieShopcart: listCookie) {
+                String cookieSpecId = cookieShopcart.getSpecId();
+                if (redisSpecId.equals(cookieSpecId)) {
+                    redisShopcart.setBuyCounts(cookieShopcart.getBuyCounts());
+                    pendingDeleteList.add(cookieShopcart);
+                }
+            }
+        }
+
+        listCookie.removeAll(pendingDeleteList);
+        listRedis.addAll(listCookie);
+
+        CookieUtils.setCookie(request, response, FOODIE_SHOPCART, JsonUtils.objectToJson(listRedis), true);
+        redisOperator.set(FOODIE_SHOPCART + ":" + userId, JsonUtils.objectToJson(listRedis));
     }
 
 }
