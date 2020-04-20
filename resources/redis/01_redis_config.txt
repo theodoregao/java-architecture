@@ -21,4 +21,5 @@
        $CLIEXEC -a "password" -p $REDISPORT shutdown
 8. chomd 777 redis_init_script
 9. /etc/init.d/redis_init_script start
-10. chkconfig redis_init_script on # 开机自启动
+10. ubuntu: sysv-rc-conf redis_init_script on # 开机自启动
+    centOS: chkconfig redis_init_script on

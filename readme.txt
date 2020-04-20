@@ -32,3 +32,4 @@
 32. Keepalived: Virtual IP, 双主热备 https://www.keepalived.org/
 33. LVS: Linux Virtual Server. http://www.linux-vs.org/
 34. Redis: https://redis.io/  free redis client: https://github.com/caoxinyu/RedisClient
+35. Redis: master/slave 拓扑结构实现

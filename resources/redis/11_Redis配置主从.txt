@@ -1,0 +1,8 @@
+
+redis-cli
+  info replication # show replicaton information
+
+redis.conf
+  replicaof
+  masterauth
+  replica-read-only
