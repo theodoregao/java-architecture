@@ -1,0 +1,12 @@
+哨兵信息检查
+查看相关信息
+
+# 查看imooc-master下的master节点信息
+sentinel master imooc-master
+
+# 查看imooc-master下的slaves节点信息
+sentinel slaves imooc-master
+
+# 查看imooc-master下的哨兵节点信息
+sentinel sentinels imooc-master
+

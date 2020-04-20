@@ -1,0 +1,11 @@
+SpringBoot 集成Redis哨兵-配置
+配置
+
+spring:
+  redis:
+    database: 1
+    password: imooc
+    sentinel:
+      master: imooc-master
+      nodes: 192.168.1.191:26379,192.168.1.192:26379,192.168.1.193:26379
+
