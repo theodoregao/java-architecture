@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -78,9 +79,12 @@ public class OrderServiceImpl implements OrderService {
         String[] specIds = itemSpecIds.split(",");
         Integer totalAmount = 0;
         Integer realPayAmount = 0;
+        List<ShopcartBO> toBeRemovedShopcartList = new ArrayList<>();
         for (String specId: specIds) {
             ShopcartBO cartItem = getBuyCountsFromShopcart(shopcartList, specId);
             int buyCounts = cartItem.getBuyCounts();
+            toBeRemovedShopcartList.add(cartItem);
+
             ItemsSpec itemsSpec = itemService.queryItemSpecById(specId);
             totalAmount += itemsSpec.getPriceNormal() * buyCounts;
             realPayAmount += itemsSpec.getPriceDiscount() * buyCounts;
@@ -124,6 +128,7 @@ public class OrderServiceImpl implements OrderService {
         OrderVO orderVO = new OrderVO();
         orderVO.setOrderId(orderId);
         orderVO.setMerchantOrdersVO(merchantOrdersVO);
+        orderVO.setToBeRemovedShopcartList(toBeRemovedShopcartList);
 
         return orderVO;
     }
