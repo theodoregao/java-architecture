@@ -1,6 +1,6 @@
 安装与配置 Redis
 1. https://redis.io/download
-2. unzip
+2. unzip, install
 3. copy utils/redis_init_script to /etc/init.d/
 4. mkdir /usr/local/redis/working
 5. copy redis.conf to /usr/local/redis
@@ -21,4 +21,5 @@
        $CLIEXEC -a "password" -p $REDISPORT shutdown
 8. chomd 777 redis_init_script
 9. /etc/init.d/redis_init_script start
-10. chkconfig redis_init_script on # 开机自启动
+10. ubuntu: sysv-rc-conf redis_init_script on # 开机自启动
+    centOS: chkconfig redis_init_script on
