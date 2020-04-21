@@ -1,0 +1,31 @@
+构建Redis集群
+redis.conf 配置
+
+# 开启集群模式
+cluster-enabled yes
+# 每一个节点需要有一个配置文件，需要6份。每个节点处于集群的角色都需要告知其他所有节点，彼此知道，这个文件用于存储集群模式下的集群状态等信息，这个文件是由redis自己维护，我们不用管。如果你要重新创建集群，那么把这个文件删了就行
+cluster-config-file nodes-201.conf
+# 超时时间，超时则认为master宕机，随后主备切换
+cluster-node-timeout 5000
+# 开启AOF
+appendonly yes
+
+启动6个redis实例
+
+    启动6台
+    如果启动过程出错，把rdb等文件删除清空
+
+创建集群
+
+#####
+# 注意1：如果你使用的是redis3.x版本，需要使用redis-trib.rb来构建集群，最新版使用C语言来构建了，这个要注意
+# 注意2：以下为新版的redis构建方式
+#####
+
+# 创建集群，主节点和从节点比例为1，1-3为主，4-6为从，1和4，2和5，3和6分别对应为主从关系，这也是最经典用的最多的集群模式
+redis-cli --cluster create ip1:port1 ip2:port2 ip3:port3 ip4:port4 ip5:port5 ip6:port6 --cluster-replicas 1
+
+slots：槽，用于装数据，主节点有，从节点没有
+检查集群信息
+
+redis-cli --cluster check 192.168.25.64:6380

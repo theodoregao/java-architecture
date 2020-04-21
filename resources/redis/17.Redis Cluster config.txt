@@ -1,0 +1,26 @@
+
+
+1. redis.config
+  1. cluster-enabled yes
+  2. cluster-config-file nodes-6379.conf
+  3. cluster-node-timeout 5000
+  4. appendonly yes
+
+2. cd working directory
+  rm appendonly.aof
+  rm dump.rdb
+
+3. redis-cli --cluster help
+  1. redis-cli --cluster create\
+    192.168.86.121:6379 \
+    192.168.86.122:6379 \
+    192.168.86.123:6379 \
+    192.168.86.124:6379 \
+    192.168.86.125:6379 \
+    192.168.86.126:6379
+  2. redis-cli --cluster check
+
+4. see cluster info
+  redis-cli -c -h 192.168.86.123 -p 6379
+    1. cluster info
+    2. cluster nodes

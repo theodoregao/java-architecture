@@ -34,3 +34,4 @@
 34. Redis: https://redis.io/  free redis client: https://github.com/caoxinyu/RedisClient
 35. Redis: master/slave 拓扑结构实现
 36. Redis: Apply sentinel to monitor redis and auto promote when master dead.
+37. Redis: Apply cluster to provide high-performance & high reliability cache.
