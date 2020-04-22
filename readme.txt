@@ -39,3 +39,4 @@
 39. Redis: multiGet, batch get.
 40. Sesson: Save token to redis to manage session.
 41: Spring: Apply EnableRedisHttpSession for http session.
+42: Spring: Apply HandlerInterceptor to intercept http request.
