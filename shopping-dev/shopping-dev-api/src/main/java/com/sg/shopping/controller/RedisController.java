@@ -2,6 +2,9 @@ package com.sg.shopping.controller;
 
 import com.sg.shopping.common.utils.RedisOperator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,13 +12,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RestController
 @ApiIgnore
 @RequestMapping("redis")
 public class RedisController {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
     private RedisOperator redisOperator;
@@ -38,6 +44,11 @@ public class RedisController {
 //        redisTemplate.delete(key);
         redisOperator.del(key);
         return "OK";
+    }
+
+    @GetMapping("gets")
+    public List<String> getMultipleKeys(@RequestParam String keys) {
+        return redisTemplate.opsForValue().multiGet(Arrays.asList(keys.split(",")));
     }
 
 }

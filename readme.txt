@@ -35,3 +35,5 @@
 35. Redis: master/slave 拓扑结构实现
 36. Redis: Apply sentinel to monitor redis and auto promote when master dead.
 37. Redis: Apply cluster to provide high-performance & high reliability cache.
+38. Guava: BloomFilter https://guava.dev/releases/22.0/api/docs/com/google/common/hash/BloomFilter.html
+39. Redis: multiGet.
