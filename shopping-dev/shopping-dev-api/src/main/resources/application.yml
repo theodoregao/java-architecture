@@ -38,6 +38,9 @@ spring:
       max-file-size: 512000           # 文件上传大小限制为500KB
       max-request-size: 512000        # 请求文件大小限制为500KB
 
+  session:
+    store-type: redis
+
 ############################################################
 #
 # mybatis 配置
