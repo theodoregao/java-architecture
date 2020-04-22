@@ -4,10 +4,12 @@ import com.sg.shopping.common.utils.*;
 import com.sg.shopping.pojo.UserInfo;
 import com.sg.shopping.pojo.bo.ShopcartBO;
 import com.sg.shopping.pojo.bo.UserInfoBO;
+import com.sg.shopping.pojo.vo.UserInfoVO;
 import com.sg.shopping.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("passport")
@@ -67,13 +70,14 @@ public class PassportController extends BaseController {
         }
 
         UserInfo userInfo = userService.createUser(userInfoBO);
+        UserInfoVO userInfoVO = convertToUserInfoVo(userInfo);
 
         if (userInfo != null) {
-            CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfo), true);
+            CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfoVO), true);
             syncShopcartData(userInfo.getId(), request, response);
         }
 
-        return JsonResult.ok(userInfo);
+        return JsonResult.ok(userInfoVO);
     }
 
     @ApiOperation(value = "Login with username and password", httpMethod = "POST")
@@ -95,12 +99,12 @@ public class PassportController extends BaseController {
             return JsonResult.errorMsg("Username or password incorrect");
         }
 
-        userInfo = setNullProperty(userInfo);
+        UserInfoVO userInfoVO = convertToUserInfoVo(userInfo);
 
-        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfo), true);
+        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfoVO), true);
         syncShopcartData(userInfo.getId(), request, response);
 
-        return JsonResult.ok(userInfo);
+        return JsonResult.ok(userInfoVO);
     }
 
     @ApiOperation(value = "User logout", httpMethod = "POST")
@@ -108,6 +112,7 @@ public class PassportController extends BaseController {
     public JsonResult logout(@RequestParam String userId,
                              HttpServletRequest request,
                              HttpServletResponse response) {
+        redisOperator.del(REDIS_USER_TOKEN + ":" + userId);
         CookieUtils.deleteCookie(request, response, "user");
         CookieUtils.deleteCookie(request, response, FOODIE_SHOPCART);
         return JsonResult.ok();

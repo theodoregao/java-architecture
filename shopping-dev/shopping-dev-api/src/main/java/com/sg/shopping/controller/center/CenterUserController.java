@@ -7,6 +7,7 @@ import com.sg.shopping.common.utils.JsonUtils;
 import com.sg.shopping.controller.BaseController;
 import com.sg.shopping.pojo.UserInfo;
 import com.sg.shopping.pojo.bo.center.CenterUserBO;
+import com.sg.shopping.pojo.vo.UserInfoVO;
 import com.sg.shopping.resource.FileUpload;
 import com.sg.shopping.service.center.CenterUserService;
 import io.swagger.annotations.Api;
@@ -52,10 +53,11 @@ public class CenterUserController extends BaseController {
             return JsonResult.errorMap(getErrors(bindingResult));
         }
         UserInfo userInfo = centerUserService.updateUserInfo(userId, userBO);
+        UserInfoVO userInfoVO = convertToUserInfoVo(userInfo);
 
-        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfo), true);
+        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfoVO), true);
 
-        return JsonResult.ok(userInfo);
+        return JsonResult.ok(userInfoVO);
     }
 
     @PostMapping("uploadFace")
@@ -119,20 +121,11 @@ public class CenterUserController extends BaseController {
 
         String finalUserFaceUrl = fileUpload.getImageServerUrl() + "/" + fileUploadPath + "?t=" + DateUtil.getCurrentDateString(DateUtil.DATE_PATTERN);
         UserInfo userInfo = centerUserService.updateUserFace(userId, finalUserFaceUrl);
+        UserInfoVO userInfoVO = convertToUserInfoVo(userInfo);
 
-        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfo), true);
+        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfoVO), true);
 
-        return JsonResult.ok(userInfo);
-    }
-
-    private UserInfo setNullProperty(UserInfo userInfo) {
-        userInfo.setPassword(null);
-        userInfo.setMobile(null);
-        userInfo.setEmail(null);
-        userInfo.setBirthday(null);
-        userInfo.setCreatedTime(null);
-        userInfo.setUpdatedTime(null);
-        return userInfo;
+        return JsonResult.ok(userInfoVO);
     }
 
     private Map<String, String> getErrors(BindingResult bindingResult) {

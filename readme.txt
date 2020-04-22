@@ -37,3 +37,4 @@
 37. Redis: Apply cluster to provide high-performance & high reliability cache.
 38. Guava: BloomFilter https://guava.dev/releases/22.0/api/docs/com/google/common/hash/BloomFilter.html
 39. Redis: multiGet, batch get.
+40. Sesson: Save token to redis to manage session.
