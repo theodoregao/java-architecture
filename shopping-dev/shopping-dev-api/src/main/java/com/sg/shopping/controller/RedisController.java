@@ -4,6 +4,7 @@ import com.sg.shopping.common.utils.RedisOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.StringRedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,6 +50,22 @@ public class RedisController {
     @GetMapping("gets")
     public List<String> getMultipleKeys(@RequestParam String keys) {
         return redisTemplate.opsForValue().multiGet(Arrays.asList(keys.split(",")));
+    }
+
+    @GetMapping("batchGet")
+    public List<Object> getBatchKeys(@RequestParam String keys) {
+        List<String> keyList = Arrays.asList(keys.split(","));
+        List<Object> result = redisTemplate.executePipelined(new RedisCallback<String>() {
+            @Override
+            public String doInRedis(RedisConnection redisConnection) throws DataAccessException {
+                StringRedisConnection src = (StringRedisConnection) redisConnection;
+                for (String key: keyList) {
+                    src.get(key);
+                }
+                return null;
+            }
+        });
+        return result;
     }
 
 }
