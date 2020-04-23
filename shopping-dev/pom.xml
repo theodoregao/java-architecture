@@ -13,6 +13,7 @@
         <module>shopping-dev-mapper</module>
         <module>shopping-dev-service</module>
         <module>shopping-dev-api</module>
+        <module>shopping-sso</module>
     </modules>
 
     <packaging>pom</packaging>
