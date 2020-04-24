@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -79,8 +80,27 @@ public class SsoController {
         // 5. 生产临时门票tempTicket用于回跳验证
         String tempTicket = generateTempTicket();
 
-        return "login";
-//        return "redirect:" + returnUrl + "?tmpTicket=" + tempTicket;
+        return "redirect:" + returnUrl + "?tmpTicket=" + tempTicket;
+    }
+
+    @PostMapping("/verifyTmpTicket")
+    @ResponseBody
+    public JsonResult verifyTmpTicket(String tmpTicket,
+                        HttpServletRequest request,
+                        HttpServletResponse response) throws NoSuchAlgorithmException {
+        // 验证redis临时票据
+        String tmpTicketValue = redisOperator.get(REDIS_TEMP_TICKET + ":" + tmpTicket);
+        if (StringUtils.isBlank(tmpTicketValue)) {
+            return JsonResult.errorUserTicket("Temp ticket error");
+        }
+        if (!tmpTicketValue.equals(MD5Utils.getMd5String(tmpTicket))) {
+            return JsonResult.errorUserTicket("Temp ticket error");
+        }
+
+        // 销毁临时票据
+        redisOperator.del(REDIS_TEMP_TICKET + ":" + tmpTicket);
+
+        return JsonResult.ok();
     }
 
     private String generateTempTicket() throws NoSuchAlgorithmException {

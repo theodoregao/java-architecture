@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 				502：拦截器拦截到用户token出错
  * 				555：异常抛出信息
  * 				556: 用户qq校验异常
+ * 			    557: 用于校验用户是否在CAS登录
  * @Copyright: Copyright (c) 2020
  * @version V1.0
  */
@@ -71,6 +72,10 @@ public class JsonResult {
 
     public static JsonResult errorUserQQ(String msg) {
         return new JsonResult(556, msg, null);
+    }
+
+    public static JsonResult errorUserTicket(String msg) {
+        return new JsonResult(557, msg, null);
     }
 
     public JsonResult() {
