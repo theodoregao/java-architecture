@@ -11,6 +11,8 @@
 	5. network.host: 0.0.0.0
 	6. http.port: 9200
 	7. cluster.initial_master_nodes: ["es-node-1"]
+	8. http.cors.enabled: true
+	9. http.cors.allow-origin: "*"
 4. edit config/jvm.options (Since we are running in virtual machine)
 	-Xms1g  -> -Xms128m
 	-Xmx1g  -> -Xmx128m
@@ -24,8 +26,10 @@
 	* hard nproc 4096
 8. edit /etc/sysctl.config
 	vm.max_map_count=262145
-9 run to reflash
+9. run to reflash
 	sysctl -p
+10. run in backend
+	/usr/local/elasticsearch/bin/elasticsearch -d
 
 
 1. 上传后解压:
