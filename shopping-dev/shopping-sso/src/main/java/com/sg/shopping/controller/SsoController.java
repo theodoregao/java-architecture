@@ -36,9 +36,36 @@ public class SsoController {
     @GetMapping("/login")
     public String login(String returnUrl, Model model,
                         HttpServletRequest request,
-                        HttpServletResponse response) {
+                        HttpServletResponse response) throws NoSuchAlgorithmException {
         model.addAttribute("returnUrl", returnUrl);
+
+        // 获取userTicket，如果cookie中能够获取到，证明用户登录过，此时再签发一个临时票据
+        String userTicket = getCookie(request, COOKIE_USER_TICKET);
+        if (verifyUserTicket(userTicket)) {
+            String tempTicket = generateTempTicket();
+            return "redirect:" + returnUrl + "?tmpTicket=" + tempTicket;
+        }
+
         return "login"; // this will redirect to login.html resource file.
+    }
+
+    private boolean verifyUserTicket(String userTicket) {
+        if (StringUtils.isBlank(userTicket)) {
+            return false;
+        }
+
+        String userId = redisOperator.get(REDIS_USER_TICKET + ":" + userTicket);
+        if (StringUtils.isBlank(userId)) {
+            return false;
+        }
+
+        // 验证门票对应的用户会话是否存在
+        String userSession = redisOperator.get(REDIS_USER_TOKEN + ":" + userId);
+        if (StringUtils.isBlank(userSession)) {
+            return false;
+        }
+
+        return true;
     }
 
     @PostMapping("/doLogin")
