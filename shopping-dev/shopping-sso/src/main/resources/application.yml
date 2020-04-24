@@ -40,6 +40,11 @@ spring:
 
 #  session:
 #    store-type: redis
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
 
 ############################################################
 #
