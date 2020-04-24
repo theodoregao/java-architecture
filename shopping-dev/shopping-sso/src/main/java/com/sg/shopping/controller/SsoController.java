@@ -143,6 +143,24 @@ public class SsoController {
         return JsonResult.ok(JsonUtils.jsonToPojo(userSession, UserInfoVO.class));
     }
 
+
+    @PostMapping("/logout")
+    @ResponseBody
+    public JsonResult logout(String userId,
+              HttpServletRequest request,
+              HttpServletResponse response) {
+        String userTicket = getCookie(request, COOKIE_USER_TICKET);
+
+        // 删除cookie和redis中的ticket
+        deleteCookie(COOKIE_USER_TICKET, response);
+        redisOperator.del(REDIS_USER_TICKET + ":" + userTicket);
+
+        // 清除redis会话
+        redisOperator.del(REDIS_USER_TOKEN + ":" + userId);
+
+        return JsonResult.ok();
+    }
+
     private String generateTempTicket() throws NoSuchAlgorithmException {
         String tempTicket = UUID.randomUUID().toString().trim();
         redisOperator.set(REDIS_TEMP_TICKET + ":" + tempTicket, MD5Utils.getMd5String(tempTicket), 600);
@@ -153,6 +171,14 @@ public class SsoController {
         Cookie cookie = new Cookie(key, value);
         cookie.setDomain("sso.com");
         cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+
+    private void deleteCookie(String key, HttpServletResponse response) {
+        Cookie cookie = new Cookie(key, null);
+        cookie.setDomain("sso.com");
+        cookie.setPath("/");
+        cookie.setMaxAge(-1);
         response.addCookie(cookie);
     }
 
