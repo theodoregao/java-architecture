@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
@@ -100,7 +99,21 @@ public class SsoController {
         // 销毁临时票据
         redisOperator.del(REDIS_TEMP_TICKET + ":" + tmpTicket);
 
-        return JsonResult.ok();
+        // 验证并获取用户的userTicket
+        String userTicket = getCookie(request, COOKIE_USER_TICKET);
+        String userId = redisOperator.get(REDIS_USER_TICKET + ":" + userTicket);
+        if (StringUtils.isBlank(userId)) {
+            return JsonResult.errorUserTicket("Ticket is not exist");
+        }
+
+        // 验证门票对应的用户会话是否存在
+        String userSession = redisOperator.get(REDIS_USER_TOKEN + ":" + userId);
+        if (StringUtils.isBlank(userSession)) {
+            return JsonResult.errorUserTicket("Session is not exist");
+        }
+
+        // 验证成功，返回用户会话
+        return JsonResult.ok(JsonUtils.jsonToPojo(userSession, UserInfoVO.class));
     }
 
     private String generateTempTicket() throws NoSuchAlgorithmException {
@@ -114,6 +127,22 @@ public class SsoController {
         cookie.setDomain("sso.com");
         cookie.setPath("/");
         response.addCookie(cookie);
+    }
+
+    private String getCookie(HttpServletRequest request, String key) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null || StringUtils.isBlank(key)) {
+            return null;
+        }
+
+        String cookieValue = null;
+        for (int i = 0; i < cookies.length; i++) {
+            if (cookies[i].getName().equals(key)) {
+                cookieValue = cookies[i].getValue();
+                break;
+            }
+        }
+        return cookieValue;
     }
 
 }
