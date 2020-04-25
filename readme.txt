@@ -44,3 +44,4 @@
 44. ES: Search engineer: Elasticsearch: https://www.elastic.co/cn
 45. ES: Elasticsearch head to manager es nodes: https://github.com/mobz/elasticsearch-head
 46. ES: Chinese es analysis: https://github.com/medcl/elasticsearch-analysis-ik
+47. ES: DSL Domain specific query: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html

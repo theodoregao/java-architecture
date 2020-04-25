@@ -1,0 +1,61 @@
+DSL搜索 - match（operator）/ids
+match 扩展
+
+    operator
+        or：搜索内容分词后，只要存在一个词语匹配就展示结果
+        and：搜索内容分词后，都要满足词语匹配
+
+    POST     /shop/_doc/_search
+    {
+        "query": {
+            "match": {
+                "desc": "慕课网"
+            }
+        }
+    }
+    # 等同于
+    {
+        "query": {
+            "match": {
+                "desc": {
+                    "query": "xbox游戏机",
+                    "operator": "or"
+                }
+            }
+        }
+    }
+    # 相当于 select * from shop where desc='xbox' or|and desc='游戏机'
+
+    minimum_should_match: 最低匹配精度，至少有[分词后的词语个数]x百分百，得出一个数据值取整。举个例子：当前属性设置为70，若一个用户查询检索内容分词后有10个词语，那么匹配度按照 10x70%=7，则desc中至少需要有7个词语匹配，就展示；若分词后有8个，则 8x70%=5.6，则desc中至少需要有5个词语匹配，就展示。
+
+    minimum_should_match 也能设置具体的数字，表示个数
+
+    POST     /shop/_doc/_search
+    {
+        "query": {
+            "match": {
+                "desc": {
+                    "query": "女友生日送我好玩的xbox游戏机",
+                    "minimum_should_match": "60%"
+                }
+            }
+        }
+    }
+
+根据文档主键ids搜索
+
+GET /shop/_doc/1001
+
+查询多个
+
+POST     /shop/_doc/_search
+
+{
+    "query": {
+        "ids": {
+            "type": "_doc",
+            "values": ["1001", "1010", "1008"]
+        }
+    }
+}
+

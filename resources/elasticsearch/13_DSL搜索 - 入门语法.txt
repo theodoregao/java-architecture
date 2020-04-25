@@ -1,0 +1,50 @@
+DSL搜索 - 入门语法
+请求参数的查询(QueryString)
+
+查询[字段]包含[内容]的文档
+
+GET     /shop/_doc/_search?q=desc:慕课网
+GET     /shop/_doc/_search?q=nickname:慕&q=age:25
+
+text与keyword搜索对比测试(keyword不会被倒排索引，不会被分词)
+
+GET     /shop/_doc/_search?q=nickname:super
+GET     /shop/_doc/_search?q=username:super
+GET     /shop/_doc/_search?q=username:super hero
+
+这种方式称之为QueryString查询方式，参数都是放在url中作为请求参数的。
+DSL基本语法
+
+QueryString用的很少，一旦参数复杂就难以构建，所以大多查询都会使用dsl来进行查询更好。
+
+    Domain Specific Language
+    特定领域语言
+    基于JSON格式的数据查询
+    查询更灵活，有利于复杂查询
+
+DSL格式语法：
+
+# 查询
+POST     /shop/_doc/_search
+{
+    "query": {
+        "match": {
+            "desc": "慕课网"
+        }
+    }
+}
+# 判断某个字段是否存在
+{
+    "query": {
+        "exists": {
+	        "field": "desc"
+	    }
+    }
+}
+
+    语法格式为一个json object，内容都是key-value键值对，json可以嵌套。
+        key可以是一些es的关键字，也可以是某个field字段，后面会遇到
+
+搜索不合法问题定位
+
+DSL查询的时候经常会出现一些错误查询，出现这样的问题大多都是json无法被es解析，他会像java那样报一个异常信息，根据异常信息去推断问题所在，比如json格式不对，关键词不存在未注册等等，甚至有时候不能定位问题直接复制错误信息到百度一搜就能定位问题了。

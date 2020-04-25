@@ -1,0 +1,32 @@
+DSL搜索 - multi_match/boost
+multi_match
+
+满足使用match在多个字段中进行查询的需求
+
+POST     /shop/_doc/_search
+{
+    "query": {
+        "multi_match": {
+                "query": "皮特帕克慕课网",
+                "fields": ["desc", "nickname"]
+
+        }
+    }
+}
+
+boost
+
+权重，为某个字段设置权重，权重越高，文档相关性得分就越高。通畅来说搜索商品名称要比商品简介的权重更高。
+
+POST     /shop/_doc/_search
+{
+    "query": {
+        "multi_match": {
+                "query": "皮特帕克慕课网",
+                "fields": ["desc", "nickname^10"]
+
+        }
+    }
+}
+
+nickname^10 代表搜索提升10倍相关性，也就是说用户搜索的时候其实以这个nickname为主，desc为辅，nickname的匹配相关度当然要提高权重比例了。

@@ -1,0 +1,128 @@
+DSL搜索 - 布尔查询
+
+可以组合多重查询
+
+    must：查询必须匹配搜索条件，譬如 and
+    should：查询匹配满足1个以上条件，譬如 or
+    must_not：不匹配搜索条件，一个都不要满足
+
+实操1：
+
+POST     /shop/_doc/_search
+
+{
+    "query": {
+        "bool": {
+            "must": [
+                {
+                    "multi_match": {
+                        "query": "慕课网",
+                        "fields": ["desc", "nickname"]
+                    }
+                },
+                {
+                    "term": {
+                        "sex": 1
+                    }
+                },
+                {
+                    "term": {
+                        "birthday": "1996-01-14"
+                    }
+                }
+            ]
+        }
+    }
+}
+
+{
+    "query": {
+        "bool": {
+            "should（must_not）": [
+                {
+                    "multi_match": {
+                        "query": "学习",
+                        "fields": ["desc", "nickname"]
+                    }
+                },
+                {
+                	"match": {
+                		"desc": "游戏"
+                	}	
+                },
+                {
+                    "term": {
+                        "sex": 0
+                    }
+                }
+            ]
+        }
+    }
+}
+
+实操2：
+
+{
+    "query": {
+        "bool": {
+            "must": [
+                {
+                	"match": {
+                		"desc": "慕"
+                	}	
+                },
+                {
+                	"match": {
+                		"nickname": "慕"
+                	}	
+                }
+            ],
+            "should": [
+                {
+                	"match": {
+                		"sex": "0"
+                	}	
+                }
+            ],
+            "must_not": [
+                {
+                	"term": {
+                		"birthday": "1992-12-24"
+                	}	
+                }
+            ]
+        }
+    }
+}
+
+Head 可视化组合查询
+为指定词语加权
+
+特殊场景下，某些词语可以单独加权，这样可以排得更加靠前。
+
+POST     /shop/_doc/_search
+{
+    "query": {
+        "bool": {
+            "should": [
+            	{
+            		"match": {
+            			"desc": {
+            				"query": "律师",
+            				"boost": 18
+            			}
+            		}
+            	},
+            	{
+            		"match": {
+            			"desc": {
+            				"query": "进修",
+            				"boost": 2
+            			}
+            		}
+            	}
+            ]
+        }
+    }
+}
+

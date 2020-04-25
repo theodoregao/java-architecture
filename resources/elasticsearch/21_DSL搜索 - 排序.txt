@@ -1,0 +1,90 @@
+DSL搜索 - 排序
+
+es的排序同sql，可以desc也可以asc。也支持组合排序。
+
+实操：
+
+POST     /shop/_doc/_search
+{
+	"query": {
+		"match": {
+			"desc": "慕课网游戏"
+		}
+    },
+    "post_filter": {
+    	"range": {
+    		"money": {
+    			"gt": 55.8,
+    			"lte": 155.8
+    		}
+    	}
+    },
+    "sort": [
+        {
+            "age": "desc"
+        },
+        {
+            "money": "desc"
+        }
+    ]
+}
+
+对文本排序
+
+由于文本会被分词，所以往往要去做排序会报错，通常我们可以为这个字段增加额外的一个附属属性，类型为keyword，用于做排序。
+
+    创建新的索引
+
+POST        /shop2/_mapping
+{
+    "properties": {
+        "id": {
+            "type": "long"
+        },
+        "nickname": {
+            "type": "text",
+            "analyzer": "ik_max_word",
+            "fields": {
+                "keyword": {
+                    "type": "keyword"
+                }
+            }
+        }
+    }
+}
+
+
+    插入数据
+
+POST         /shop2/_doc
+{
+    "id": 1001,
+    "nickname": "美丽的风景"
+}
+{
+    "id": 1002,
+    "nickname": "漂亮的小哥哥"
+}
+{
+    "id": 1003,
+    "nickname": "飞翔的巨鹰"
+}
+{
+    "id": 1004,
+    "nickname": "完美的天空"
+}
+{
+    "id": 1005,
+    "nickname": "广阔的海域"
+}
+
+    排序
+
+{
+    "sort": [
+        {
+            "nickname.keyword": "desc"
+        }
+    ]
+}
+
