@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/shopping?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://192.168.86.131:3306/shopping?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     password: m0veFast!
   redis:
 #  # 集群模式
@@ -13,7 +13,7 @@ spring:
 
    # Redis 单机单实例
      database: 0
-     host: 192.168.86.150
+     host: 192.168.86.131
      port: 6379
      password: m0veFast!
 
