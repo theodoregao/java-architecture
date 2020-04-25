@@ -7,7 +7,7 @@ spring:
     password: root
   redis:
     database: 0
-    host: 192.168.86.150
+    host: 192.168.86.131
     port: 6379
     password: m0veFast!
 

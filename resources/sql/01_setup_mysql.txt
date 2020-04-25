@@ -1,0 +1,10 @@
+
+1. sudo apt-get install mysql-server
+2. sudo mysql_secure_installation utility
+3. sudo mysql -u root -p
+	grant all privileges on *.* to 'root'@'%' identified by 'm0veFast!';
+	update mysql.user set plugin = 'mysql_native_password' where User='root';
+	flush privileges;
+4. sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
+	bind-address            = 0.0.0.0
+5. sudo systemctl restart mysql
