@@ -1,0 +1,48 @@
+文档乐观锁控制 if_seq_no与if_primary_term
+观察操作
+
+    插入新数据
+
+    POST /my_doc/_doc
+    {
+        "id": 1010,
+        "name": "imooc-1010",
+        "desc": "imoocimooc！",
+        "create_date": "2019-12-24"
+    }
+    # 此时 _version 为 1
+
+    修改数据
+
+    POST    /my_doc/_doc/{_id}/_update
+    {
+        "doc": {
+            "name": "慕课"
+        }
+    }
+    # 此时 _version 为 2
+
+    模拟两个客户端操作同一个文档数据，_version都携带为一样的数值
+
+    # 操作1
+    POST    /my_doc/_doc/{_id}/_update?if_seq_no={数值}&if_primary_term={数值}
+    {
+        "doc": {
+            "name": "慕课1"
+        }
+    }
+
+    # 操作2
+    POST    /my_doc/_doc/{_id}/_update?if_seq_no={数值}&if_primary_term={数值}
+    {
+        "doc": {
+            "name": "慕课2"
+        }
+    }
+
+版本元数据
+
+    _seq_no：文档版本号，作用同_version（相当于学生编号，每个班级的班主任为学生分配编号，效率要比学校教务处分配来的更加高效，管理起来更方便）
+    _primary_term：文档所在位置（相当于班级）
+    官文地址：https://www.elastic.co/guide/en/elasticsearch/reference/current/optimistic-concurrency-control.html
+

@@ -1,0 +1,30 @@
+文档的基本操作 - 删除与修改
+删除文档
+
+DELETE /my_doc/_doc/1
+
+    注：文档删除不是立即删除，文档还是保存在磁盘上，索引增长越来越多，才会把那些曾经标识过删除的，进行清理，从磁盘上移出去。
+
+修改文档
+
+    局部：
+
+    POST /my_doc/_doc/1/_update
+    {
+        "doc": {
+            "name": "慕课"
+        }
+    }
+
+    全量替换：
+
+    PUT /my_doc/_doc/1
+    {
+         "id": 1001,
+        "name": "imooc-1",
+        "desc": "imooc is very good, 慕课网非常牛！",
+        "create_date": "2019-12-24"
+    }
+
+    注：每次修改后，version会更改
+

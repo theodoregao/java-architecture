@@ -1,0 +1,15 @@
+建立IK中文分词器
+IK中文分词器
+
+Github：https://github.com/medcl/elasticsearch-analysis-ik
+
+    zip解压： unzip xxx.zip -d ik
+
+测试中文分词效果
+
+POST /_analyze
+{
+    "analyzer": "ik_max_word",
+    "text": "上下班车流量很大"
+}
+

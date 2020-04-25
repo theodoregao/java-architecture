@@ -43,3 +43,4 @@
 43. Sprint: Apply thymeleaf to provide html template. https://www.thymeleaf.org/
 44. ES: Search engineer: Elasticsearch: https://www.elastic.co/cn
 45. ES: Elasticsearch head to manager es nodes: https://github.com/mobz/elasticsearch-head
+46. ES: Chinese es analysis: https://github.com/medcl/elasticsearch-analysis-ik

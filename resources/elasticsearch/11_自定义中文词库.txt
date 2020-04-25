@@ -1,0 +1,15 @@
+自定义中文词库
+1. 在{es}/plugins/ik/config下，创建：
+
+vim custom.dic
+
+2. 并且添加内容：
+
+慕课网
+骚年
+
+3.配置自定义扩展词典
+
+<entry key="ext_dict">custom.dic</entry>
+
+4. 重启

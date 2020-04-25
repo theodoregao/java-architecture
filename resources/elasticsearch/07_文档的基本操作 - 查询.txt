@@ -1,0 +1,42 @@
+文档的基本操作 - 查询
+查询文档
+
+常规查询
+
+GET /index_demo/_doc/1
+GET /index_demo/_doc/_search
+
+查询结果
+
+{
+    "_index": "my_doc",
+    "_type": "_doc",
+    "_id": "2",
+    "_score": 1.0,
+    "_version": 9,
+    "_source": {
+        "id": 1002,
+        "name": "imooc-2",
+        "desc": "imooc is fashion",
+        "create_date": "2019-12-25"
+    }
+}
+
+元数据
+
+    _index：文档数据所属那个索引，理解为数据库的某张表即可。
+    _type：文档数据属于哪个类型，新版本使用_doc。
+    _id：文档数据的唯一标识，类似数据库中某张表的主键。可以自动生成或者手动指定。
+    _score：查询相关度，是否契合用户匹配，分数越高用户的搜索体验越高。
+    _version：版本号。
+    _source：文档数据，json格式。
+
+定制结果集
+
+GET /index_demo/_doc/1?_source=id,name
+GET /index_demo/_doc/_search?_source=id,name
+
+判断文档是否存在
+
+HEAD /index_demo/_doc/1
+
