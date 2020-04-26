@@ -1,0 +1,14 @@
+深度分页 - 提升搜索量
+提升搜索量
+
+“changing the [index.max_result_window] index level setting”
+
+通过设置index.max_result_window来突破10000数据
+
+GET     /shop/_settings
+
+PUT     /shop/_settings
+{ 
+    "index.max_result_window": "20000"
+}
+

@@ -1,0 +1,25 @@
+scroll 滚动搜索
+
+一次性查询1万+数据，往往会造成性能影响，因为数据量太多了。这个时候可以使用滚动搜索，也就是 scroll。
+滚动搜索可以先查询出一些数据，然后再紧接着依次往下查询。在第一次查询的时候会有一个滚动id，相当于一个锚标记，随后再次滚动搜索会需要上一次搜索的锚标记，根据这个进行下一次的搜索请求。每次搜索都是基于一个历史的数据快照，查询数据的期间，如果有数据变更，那么和搜索是没有关系的，搜索的内容还是快照中的数据。
+
+    scroll=1m，相当于是一个session会话时间，搜索保持的上下文时间为1分钟。
+
+POST    /shop/_search?scroll=1m
+{
+    "query": { 
+    	"match_all": {
+    	}
+    },  
+    "sort" : ["_doc"], 
+    "size":  5
+}
+
+POST    /_search/scroll
+{
+    "scroll": "1m", 
+    "scroll_id" : "your last scroll_id"
+}
+
+    官文地址：https://www.elastic.co/guide/cn/elasticsearch/guide/current/scroll.html
+
