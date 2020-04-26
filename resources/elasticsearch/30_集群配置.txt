@@ -1,0 +1,58 @@
+集群配置
+
+1. edit elasticsearch.yml
+	1. cluster.name: shopping-cluster
+	2. node.name: es-node-1 # es-node-2, es-node-3
+	3. 在network.host: 0.0.0.0之后添加五个字段：
+		3.1 network.publish_host: 192.168.86.161 # 162, 163
+		3.2 http.cors.enabled: true
+		3.3 http.cors.allow-origin: "*"
+		3.4 node.master: true # 主节点 (true: 有可能成为master， false：永远不可能成为master)
+		3.5 node.data: true   # 数据节点
+	4. discovery.seed_hosts: ["192.168.86.161", "192.168.86.162", "192.168.86.163"]
+	5. cluster.initial_master_nodes
+
+
+
+
+搭建Elasticsearch集群
+前置操作
+
+当克隆以后，es中的data目录，一定要清空，这里面包含了原先的索引库数据。
+配置集群
+
+修改elasticsearch.yml这个配置文件如下：
+
+# 配置集群名称，保证每个节点的名称相同，如此就能都处于一个集群之内了
+cluster.name: imooc-es-cluster
+
+# 每一个节点的名称，必须不一样
+node.name: es-node1
+
+# http端口（使用默认即可）
+http.port: 9200
+
+# 主节点，作用主要是用于来管理整个集群，负责创建或删除索引，管理其他非master节点（相当于企业老总）
+node.master: true
+
+# 数据节点，用于对文档数据的增删改查
+node.data: true
+
+# 集群列表
+discovery.seed_hosts: ["192.168.1.184", "192.168.1.185", "192.168.1.186"]
+
+# 启动的时候使用一个master节点
+cluster.initial_master_nodes: ["es-node1"]
+
+最后可以通过如下命令查看配置文件的内容：
+
+more elasticsearch.yml | grep ^[^#]
+
+分别启动3台es
+
+切换到esuser后在启动，访问集群各个节点，查看信息：
+
+    http://192.168.1.184:9200/
+    http://192.168.1.185:9200/
+    http://192.168.1.186:9200/
+
