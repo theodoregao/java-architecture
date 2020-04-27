@@ -1,0 +1,24 @@
+Logstatsh数据同步 - Logstash介绍
+Logstash
+
+Logstash是elastic技术栈中的一个技术。它是一个数据采集引擎，可以从数据库采集数据到es中。我们可以通过设置自增id主键或者时间来控制数据的自动同步，这个id或者时间就是用于给logstash进行识别的
+
+    id：假设现在有1000条数据，Logstatsh识别后会进行一次同步，同步完会记录这个id为1000，以后数据库新增数据，那么id会一直累加，Logstatsh会有定时任务，发现有id大于1000了，则增量加入到es中
+    时间：同理，一开始同步1000条数据，每条数据都有一个字段，为time，初次同步完毕后，记录这个time，下次同步的时候进行时间比对，如果有超过这个时间的，那么就可以做同步，这里可以同步新增数据，或者修改元数据，因为同一条数据的时间更改会被识别，而id则不会。
+
+安装Logstash
+
+官方链接：
+https://www.elastic.co/cn/downloads/past-releases/logstash-6-4-3
+
+    注：使用Logstatsh的版本号与elasticsearch版本号需要保持一致
+
+插件 logstash-input-jdbc
+
+本插件用于同步，es6.x起自带，这个是集成在了 logstash中的。所以直接配置同步数据库的配置文件即可
+创建索引
+
+同步数据到es中，前提得要有索引，这个需要手动先去创建，名字随意。比如：foodie-items
+JDK
+
+记得安装JDK，java -version检查一下，如果没有安装，请安装一下。
