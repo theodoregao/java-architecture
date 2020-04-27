@@ -46,3 +46,4 @@
 46. ES: Chinese es analysis: https://github.com/medcl/elasticsearch-analysis-ik
 47. ES: DSL Domain specific query: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html
 48. ES: Config elasticsearch cluster.
+49. Sprint & ES: Basic config for SprintBoot integrate with elasticsearch.
