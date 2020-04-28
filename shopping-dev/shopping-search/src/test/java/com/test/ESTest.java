@@ -38,7 +38,7 @@ public class ESTest {
     private ElasticsearchTemplate elasticsearchTemplate;
 
     // 不建议使用代码对索引进行管理
-    @Test
+//    @Test
     public void createIndexStu() {
         IndexQuery indexQuery = null;
         indexQuery = new IndexQueryBuilder().withObject(
@@ -99,12 +99,12 @@ public class ESTest {
         return stu;
     }
 
-    @Test
+//    @Test
     public void deleteIndexStu() {
         elasticsearchTemplate.deleteIndex(Stu.class);
     }
 
-    @Test
+//    @Test
     public void updateStuDoc() {
         Map<String, Object> map = new HashMap<>();
         map.put("sign", "I am not Harry Porter");
@@ -118,7 +118,7 @@ public class ESTest {
         elasticsearchTemplate.update(updateQuery);
     }
 
-    @Test
+//    @Test
     public void queryStuDoc() {
         GetQuery getQuery = new GetQuery();
         getQuery.setId("1001");
@@ -126,12 +126,12 @@ public class ESTest {
         System.out.println(stu);
     }
 
-    @Test
+//    @Test
     public void deleteStuDoc() {
         elasticsearchTemplate.delete(Stu.class, "1001");
     }
 
-    @Test
+//    @Test
     public void searchStuDoc() {
         Pageable pageable = PageRequest.of(0, 3);
         SearchQuery query =
@@ -147,7 +147,7 @@ public class ESTest {
         }
     }
 
-    @Test
+//    @Test
     public void highlightStuDoc() {
         Pageable pageable = PageRequest.of(0, 3);
         SortBuilder ageSortBuilder = new FieldSortBuilder("age")
