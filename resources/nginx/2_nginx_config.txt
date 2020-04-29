@@ -1,0 +1,25 @@
+
+    upstream api.sg.shopping.com {
+        server 192.168.86.171:8088;
+    }
+
+    upstream shop.sg.shopping.com {
+        server 192.168.86.181:8080;
+    }
+
+    server {
+        listen 8088;
+        server_name api.sg.shopping.com;
+        location ~ {
+            proxy_pass http://api.sg.shopping.com;
+        }
+    }
+
+    server {
+        listen 80;
+        server_name shop.sg.shopping.com;
+        location ~ {
+            proxy_pass http://shop.sg.shopping.com;
+        }
+    }
+}

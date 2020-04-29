@@ -9,6 +9,8 @@ import com.sg.shopping.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +27,8 @@ import java.util.UUID;
 @RequestMapping("passport")
 @Api(value = "Register & login", tags = {"Provide APIs for register and login"})
 public class PassportController extends BaseController {
+
+    final static Logger logger = LoggerFactory.getLogger(PassportController.class);
 
     @Autowired
     private UserService userService;
@@ -104,7 +109,19 @@ public class PassportController extends BaseController {
         CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(userInfoVO), true);
         syncShopcartData(userInfo.getId(), request, response);
 
+        logResponseHeaders(response);
         return JsonResult.ok(userInfoVO);
+    }
+
+    private static void logResponseHeaders(HttpServletResponse httpServletResponse) {
+
+        Collection<String> headerNames = httpServletResponse.getHeaderNames();
+
+        for (String headerName : headerNames) {
+            if (headerName.equals("Set-Cookie")) {
+                logger.info("Response header name={}, header value={}", headerName, httpServletResponse.getHeader(headerName));
+            }
+        }
     }
 
     @ApiOperation(value = "User logout", httpMethod = "POST")

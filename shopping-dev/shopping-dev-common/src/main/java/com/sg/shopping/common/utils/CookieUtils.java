@@ -7,6 +7,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
@@ -206,8 +208,9 @@ public final class CookieUtils {
             if (cookieMaxage > 0)
                 cookie.setMaxAge(cookieMaxage);
             if (null != request) {// 设置域名的cookie
-            	String domainName = "192.168.86.150";//getDomainName(request);
+            	String domainName = "sg.shopping.com"; //getDomainName(request);
                 logger.info("========== domainName: {} ==========", domainName);
+                logger.info("save value: {} -> {}", cookieName, cookieValue);
                 if (!"localhost".equals(domainName)) {
                 	cookie.setDomain(domainName);
                 }
@@ -261,31 +264,20 @@ public final class CookieUtils {
      */
     private static final String getDomainName(HttpServletRequest request) {
         String domainName = null;
+        try {
 
-        String serverName = request.getRequestURL().toString();
-        if (serverName == null || serverName.equals("")) {
-            domainName = "";
-        } else {
-            serverName = serverName.toLowerCase();
-            serverName = serverName.substring(7);
-            final int end = serverName.indexOf("/");
-            serverName = serverName.substring(0, end);
-            if (serverName.indexOf(":") > 0) {
-            	String[] ary = serverName.split("\\:");
-            	serverName = ary[0];
+            String url = request.getRequestURL().toString();
+            if (!url.startsWith("http") && !url.startsWith("https")) {
+                url = "http://" + url;
             }
-
-            final String[] domains = serverName.split("\\.");
-            int len = domains.length;
-            if (len > 3 && !isIp(serverName)) {
-            	// www.xxx.com.cn
-                domainName = "." + domains[len - 3] + "." + domains[len - 2] + "." + domains[len - 1];
-            } else if (len <= 3 && len > 1) {
-                // xxx.com or xxx.cn
-                domainName = "." + domains[len - 2] + "." + domains[len - 1];
-            } else {
-                domainName = serverName;
+            URL netUrl = new URL(url);
+            domainName = netUrl.getHost();
+            if (domainName.startsWith("www")) {
+                domainName = domainName.substring("www".length() + 1);
             }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
         }
         return domainName;
     }

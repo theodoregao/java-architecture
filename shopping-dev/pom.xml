@@ -15,6 +15,7 @@
         <module>shopping-dev-api</module>
         <module>shopping-sso</module>
         <module>shopping-search</module>
+        <module>shopping-fileserver</module>
     </modules>
 
     <packaging>pom</packaging>

@@ -1,0 +1,29 @@
+server:
+  port: 8066
+
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.86.131:3306/shopping?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    password: m0veFast!
+  redis:
+#  # 集群模式
+#    password: m0veFast!
+#    cluster:
+#      nodes: 192.168.86.121:6379,192.168.86.122:6379,192.168.86.123:6379,192.168.86.124:6379,192.168.86.125:6379,192.168.86.126:6379
+
+   # Redis 单机单实例
+     database: 0
+     host: 192.168.86.131
+     port: 6379
+     password: m0veFast!
+
+#    # 哨兵模式
+#    database: 0
+#    password: m0veFast!
+#    sentinel:
+#      master: mymaster
+#      nodes: 192.168.86.121:26379,192.168.86.122:26379,192.168.86.123:26379
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

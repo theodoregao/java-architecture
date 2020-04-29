@@ -1,0 +1,5 @@
+    serverUrl: "http://www.api.sg.shopping.com:8088/apiserver",                      // 接口服务接口地址
+    paymentServerUrl: "http://www.payment.t.mukewang.com/foodie-payment",       // 支付中心服务地址
+    shopServerUrl: "http://www.shop.sg.shopping.com:80/shop",                            // 门户网站地址
+    centerServerUrl: "http://www.shop.sg.shopping.com:80/center",                        // 用户中心地址
+    cookieDomain: "sg.shopping.com",
