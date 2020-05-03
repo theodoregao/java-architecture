@@ -51,3 +51,5 @@
 51. fastDFS: Provide distributed file system. https://www.jianshu.com/p/1c71ae024e5e
 52. MQ. RabbitMQ: https://www.rabbitmq.com/
 53. Sprint: Integrate amqp.rabbit into Sprintboot.
+54. MQ. Encapsulate Rabbitmq.
+55. Elastic-Job. https://github.com/Esjob-Cloud-DevOps/elastic-job

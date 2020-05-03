@@ -82,5 +82,6 @@
   		<module>rabbit-api</module>
   		<module>rabbit-core-producer</module>
   		<module>rabbit-task</module>
+		<module>es-job</module>
   	</modules>
 </project>
