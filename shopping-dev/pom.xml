@@ -16,9 +16,6 @@
         <module>shopping-sso</module>
         <module>shopping-search</module>
         <module>shopping-fileserver</module>
-        <module>rabbitmq</module>
-        <module>rabbitmq-consumer</module>
-        <module>rabbitmq-producer</module>
     </modules>
 
     <packaging>pom</packaging>
